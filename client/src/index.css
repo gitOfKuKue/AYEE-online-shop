@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --light-green--: #8eb486;
+  --light-gray--: #faf7f3;
+  --milk-gray--: #fdfaf6;
+  --mud-white--: #fefbf6;
+  --pure-white--: #ffffff;
+  --milk-white--: #fff6e9;
+  --dry-black--: #45474b;
+  --midnight-black--: #45474b;
+  --light-black--: #7a7a73;
+  --red--: #fb4141;
+
+  /* Defined name */
+  --color-iconic: var(--light-green--);
+  --color-background: var(--milk-gray--);
+  --color-card-bg: var(--milk-white--);
+  --color-border: var(--dry-black--);
+  --color-font1: var(--mud-white--);
+  --color-font2: var(--midnight-black--);
+  --color-font2-light: var(--light-black--);
+  --color-danger: var(--red--);
+
+  --standard-radius: 5px;
+}
+
+* {
+  user-select: none;
+  scroll-behavior: smooth;
+}
+
+/* Window Scroll Bar hiding */
+html,
+body,
+.hide-y-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.hide-y-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* ================ */
+/* Log In  */
+/* ================ */
+
+/* ================ */
+/* Main Section  */
+/* ================ */
+#intro-section {
+  background-image: url("./assets/images/circle-scatter-haikei.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+}
+
+#footer-decoration {
+  height: 210px;
+  background-image: url("./assets/images/layered-waves.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+}

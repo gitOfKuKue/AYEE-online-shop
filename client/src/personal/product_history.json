@@ -1,0 +1,20 @@
+[
+      {
+    "id": 7,
+    "title": "Caramel Frappe",
+    "description": "A creamy caramel frappe topped with whipped cream.",
+    "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.8,
+    "sold": 101,
+    "valid": true
+  },
+  {
+    "id": 8,
+    "title": "Blueberry Lemonade",
+    "description": "A tangy lemonade with a burst of fresh blueberry flavor.",
+    "image": "https://images.unsplash.com/photo-1626808642875-0aa545482dfb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.4,
+    "sold": 66,
+    "valid": true
+  }
+]

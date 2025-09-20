@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import signupPic from "../../assets/images/signup-pic.svg";
 import facebookPic from "../../assets/icons/facebook.png";
 import googlePic from "../../assets/icons/google.png";
@@ -10,6 +10,7 @@ import useFetchFuncs from "../../Common/useFetchFuncs";
 import useCommonFuncs from "../../Common/useCommonFuncs";
 
 const SignupPage = () => {
+  const form = useRef();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);

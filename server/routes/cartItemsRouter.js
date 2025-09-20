@@ -1,15 +1,13 @@
 const express = require("express");
 
 const {
-  getCartItems,
-  getCartItem,
   addCartItem,
+  adjustQuantity
 } = require("../controller/cartItemsController");
 
 const router = express.Router();
 
-router.get("/cartItems", getCartItems);
-router.get("/cartItems/:id", getCartItem);
-router.post("/cartItems", addCartItem);
+router.post("/users/:id/cart", addCartItem);
+router.patch("/users/:id/cart/quantity", adjustQuantity);
 
 module.exports = router;

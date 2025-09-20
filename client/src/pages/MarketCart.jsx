@@ -1,12 +1,14 @@
-// src/pages/MarketCart.jsx
 import React, { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import emptyPic from "../assets/images/Empty-bro.svg";
 import PayBtn from "../Components/buttons/PayBtn";
 import useFetchFuncs from "../Common/useFetchFuncs";
 import ClearBtn from "../Components/buttons/ClearBtn";
+import useCommonFuncs from "../Common/useCommonFuncs";
+import { useNavigate } from "react-router";
 
 const MarketCart = () => {
+  const navigate = useNavigate();
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser).user : null;
 
@@ -15,13 +17,11 @@ const MarketCart = () => {
   const [tax] = useState(0);
 
   const [products, setProducts] = useState([]);
-  // keep original cart raw data (from user) — may be array of ids or objects
-  const [cartItems] = useState(user?.cart || []);
+  // ✅ make cartItems reactive
+  const [cartItems, setCartItems] = useState(user?.cart || []);
 
-  // This is the state we actually render / update quantities on
-  const [productsInCart, setProductsInCart] = useState([]);
-
-  const { fetchProducts } = useFetchFuncs();
+  const { fetchProducts, baseUrl } = useFetchFuncs();
+  const { handleAddCartItem, handleSubtractCartItem } = useCommonFuncs();
   const maxStars = 5;
 
   // fetch product list
@@ -41,84 +41,73 @@ const MarketCart = () => {
     };
   }, [fetchProducts]);
 
-  // normalize cart (accepts numbers or objects) and merge with product details
+  const [productsInCart, setProductsInCart] = useState([]);
+
+  // ✅ whenever products or cartItems change, recompute merged list
   useEffect(() => {
-    if (!products || products.length === 0) {
-      setProductsInCart([]);
-      return;
-    }
-
-    // Normalize cart entries -> { id: Number, quantity: Number }
-    const normalized = (cartItems || [])
-      .map((c) => {
-        if (typeof c === "number") return { id: Number(c), quantity: 1 };
-        if (typeof c === "string" && !Number.isNaN(Number(c)))
-          return { id: Number(c), quantity: 1 };
-        if (c && typeof c === "object") {
-          // try common keys
-          const id = Number(
-            c.productId ?? c.id ?? c.product_id ?? c.productIdNumber
-          );
-          const quantity = Number(c.quantity ?? c.qty ?? 1);
-          return {
-            id: Number.isNaN(id) ? null : id,
-            quantity: Number.isNaN(quantity) ? 1 : Math.max(1, quantity),
-          };
-        }
-        return { id: null, quantity: 1 };
-      })
-      .filter((n) => n.id !== null);
-
-    // Merge with products array; ensure quantity exists
+    if (!products || !cartItems) return;
     const merged = products
-      .filter((p) => normalized.some((n) => Number(p.id) === Number(n.id)))
-      .map((p) => {
-        const n = normalized.find((x) => Number(x.id) === Number(p.id));
+      .filter((product) =>
+        cartItems.some((item) => item.productId === product.id)
+      )
+      .map((product) => {
+        const cartItem = cartItems.find(
+          (item) => item.productId === product.id
+        );
         return {
-          ...p,
-          quantity: n?.quantity ?? 1,
+          ...product, // product fields
+          ...cartItem, // e.g. quantity
         };
       });
-
     setProductsInCart(merged);
   }, [products, cartItems]);
 
-  // helpers to change quantities
-  const addQuantity = (id) => {
-    setProductsInCart((prev) =>
+  const subtractQuantity = async (item) => {
+    try {
+      await handleSubtractCartItem(user, item, baseUrl);
+      setCartItems((prev) =>
+        prev
+          .map((ci) =>
+            ci.productId === item.id ? { ...ci, quantity: ci.quantity - 1 } : ci
+          )
+          // 🔑 remove item if quantity ≤ 0
+          .filter((ci) => ci.quantity > 0)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleQuantityChange = (id, rawValue) => {
+    const value = Math.max(0, Number(rawValue) || 0);
+    setCartItems((prev) =>
       prev.map((item) =>
-        Number(item.id) === Number(id)
-          ? { ...item, quantity: (Number(item.quantity) || 0) + 1 }
+        Number(item.productId) === Number(id)
+          ? { ...item, quantity: value }
           : item
       )
     );
   };
 
-  const subtractQuantity = (id) => {
-    setProductsInCart((prev) =>
-      prev
-        .map((item) =>
-          Number(item.id) === Number(id)
-            ? {
-                ...item,
-                quantity: Math.max((Number(item.quantity) || 0) - 1, 0),
-              }
-            : item
-        )
-        .filter((item) => (Number(item.quantity) || 0) > 0)
-    );
+  // ✅ add quantity both on server and local state
+  const addQuantity = async (item) => {
+    try {
+      await handleAddCartItem(user, item, navigate, baseUrl);
+      setCartItems((prev) => {
+        const exists = prev.find((ci) => ci.productId === item.id);
+        return exists
+          ? prev.map((ci) =>
+              ci.productId === item.id
+                ? { ...ci, quantity: ci.quantity + 1 }
+                : ci
+            )
+          : [...prev, { productId: item.id, quantity: 1 }];
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleQuantityChange = (id, rawValue) => {
-    const value = Math.max(0, Number(rawValue) || 0);
-    setProductsInCart((prev) =>
-      prev.map((item) =>
-        Number(item.id) === Number(id) ? { ...item, quantity: value } : item
-      )
-    );
-  };
-
-  // safe total calculation from productsInCart
   const calculateTotal = () =>
     parseFloat(
       productsInCart
@@ -138,7 +127,6 @@ const MarketCart = () => {
 
   return (
     <section className="h-[calc(100vh-5em)] px-4 py-6 lg:px-10 bg-background">
-      {/* Header */}
       <div className="flex items-center justify-center gap-3 mb-8">
         <ShoppingCart size={40} />
         <h1 className="text-4xl font-bold">
@@ -146,7 +134,6 @@ const MarketCart = () => {
         </h1>
       </div>
 
-      {/* Main Section */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Cart Table */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow p-4">
@@ -163,7 +150,6 @@ const MarketCart = () => {
 
           {productsInCart.length > 0 ? (
             <div className="relative">
-              {/* Table Header */}
               <table className="w-full border border-border">
                 <thead className="bg-gray-100 sticky top-0 z-10">
                   <tr>
@@ -183,7 +169,6 @@ const MarketCart = () => {
                 </thead>
               </table>
 
-              {/* Scrollable Body */}
               <div className="max-h-[50vh] overflow-y-auto hide-y-scrollbar">
                 <table className="w-full border border-border border-t-0">
                   <tbody>
@@ -209,28 +194,6 @@ const MarketCart = () => {
                               <p className="text-gray-600 text-sm mb-2">
                                 {item.description}
                               </p>
-                              <div className="flex items-center">
-                                {[...Array(maxStars)].map((_, i) => (
-                                  <svg
-                                    key={i}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    className={`w-5 h-5 ${
-                                      i < Math.round(item.rating)
-                                        ? "fill-yellow-400 text-yellow-400"
-                                        : "fill-gray-300 text-gray-300"
-                                    }`}
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.783 1.4 8.168L12 18.896l-7.334 3.864 1.4-8.168L.132 9.209l8.2-1.191L12 .587z"
-                                    />
-                                  </svg>
-                                ))}
-                                <span className="ml-2 text-sm text-gray-500">
-                                  ({item.sold} sold)
-                                </span>
-                              </div>
                             </div>
                           </div>
                         </td>
@@ -239,7 +202,7 @@ const MarketCart = () => {
                           <div className="flex items-center justify-center gap-3">
                             <button
                               className="bg-gray-200 p-1 rounded hover:bg-gray-300"
-                              onClick={() => subtractQuantity(item.id)}
+                              onClick={() => subtractQuantity(item)}
                               type="button"
                             >
                               <Minus size={16} />
@@ -248,7 +211,7 @@ const MarketCart = () => {
                             <input
                               type="number"
                               min="0"
-                              value={Number(item.quantity) || 0}
+                              value={Number(item?.quantity) || 0}
                               onChange={(e) =>
                                 handleQuantityChange(item.id, e.target.value)
                               }
@@ -261,7 +224,7 @@ const MarketCart = () => {
 
                             <button
                               className="bg-gray-200 p-1 rounded hover:bg-gray-300"
-                              onClick={() => addQuantity(item.id)}
+                              onClick={() => addQuantity(item)}
                               type="button"
                             >
                               <Plus size={16} />
@@ -281,7 +244,6 @@ const MarketCart = () => {
                 </table>
               </div>
 
-              {/* Fixed Total Row */}
               <table className="w-full border border-border">
                 <tbody>
                   <tr className="bg-gray-100 font-bold text-lg">

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom"; // useLocation for active 
 
 // Icons / Profile Pic import
 import logo from "../../assets/logo/AYEE_onlyLOGO.svg";
-import defaultProfilePic from "../../assets/icons/defaultProfilePic.png";
+import defaultProfilePic from "../../assets/profiles/defaultProfilePic.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,8 @@ import useCommonFuncs from "../../Common/useCommonFuncs";
 import useUser from "../../Hook/useUser";
 
 const Navigation = () => {
+  const profilePath = "/src/assets/profiles/";
+
   const location = useLocation(); // current path
   const [menus, setMenus] = useState([
     { id: 1, menu: "Home", icon: faHome, link: "/", isCurrent: false },
@@ -41,9 +43,10 @@ const Navigation = () => {
     },
   ]);
 
-  const { isLoggedIn } = useCommonFuncs();
+  const { isLoggedIn, setSearchQuery } = useCommonFuncs();
 
-  const { data: user } = useUser();
+  const { data } = useUser();
+  const user = data?.user;
 
   // Update active menu on route change
   useEffect(() => {
@@ -97,6 +100,7 @@ const Navigation = () => {
                 type="text"
                 className="bg-[#F9F6F3] pl-12 py-2 rounded-full w-full text-lg border border-border"
                 placeholder="Search what you want ..."
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           )}
@@ -112,7 +116,9 @@ const Navigation = () => {
   "
               >
                 <img
-                  src={user?.profileImage || defaultProfilePic}
+                  src={`${profilePath}${
+                    user?.profileImage || defaultProfilePic
+                  }`}
                   alt={`${user?.firstName || "User"} - profile picture`}
                   className="w-full h-full object-cover"
                 />

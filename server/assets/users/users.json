@@ -7,9 +7,9 @@
       "email": "kukue123@gmail.com",
       "phone": "09796000227",
       "password": "$2b$10$7Wy0sVArZ2QOh3Um.bBfE.K.sU6PatuNPd1FuZRweO4K/.gkQ.xrG",
-      "role": "user",
+      "role": "admin",
       "createdAt": "2025-09-19T04:45:13.103Z",
-      "profileImage": null,
+      "profileImage": "my-profile.jpg",
       "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",
       "preferredPaymentMethod": "",
@@ -38,16 +38,24 @@
       "loyaltyPoints": 145,
       "wishlist": [5, 7],
       "recentOrders": [
-        { "productId": 10, "quantity": 2 }
+        {
+          "productId": 10,
+          "quantity": 2
+        }
       ],
       "membershipTier": "Gold",
       "preferredCategories": ["Fashion", "Travel"],
       "cart": [
-        { "productId": 11, "quantity": 1 },
-        { "productId": 12, "quantity": 2 }
+        {
+          "productId": 13,
+          "quantity": 1
+        }
       ],
       "paymentMethods": [
-        { "type": "PayPal", "email": "bob.paypal2025@example.com" }
+        {
+          "type": "PayPal",
+          "email": "bob.paypal2025@example.com"
+        }
       ],
       "lastLogin": "2025-10-12T08:30:00Z"
     },
@@ -67,19 +75,74 @@
       "loyaltyPoints": 65,
       "wishlist": [8, 9],
       "recentOrders": [
-        { "productId": 14, "quantity": 1 },
-        { "productId": 15, "quantity": 1 }
+        {
+          "productId": 14,
+          "quantity": 1
+        },
+        {
+          "productId": 15,
+          "quantity": 1
+        }
       ],
       "membershipTier": "Silver",
       "preferredCategories": ["Tech", "Books"],
       "cart": [
-        { "productId": 16, "quantity": 1 },
-        { "productId": 18, "quantity": 1 }
+        {
+          "productId": 16,
+          "quantity": 1
+        },
+        {
+          "productId": 18,
+          "quantity": 1
+        }
       ],
       "paymentMethods": [
-        { "type": "Credit Card", "last4": "7788", "expiry": "07/29" }
+        {
+          "type": "Credit Card",
+          "last4": "7788",
+          "expiry": "07/29"
+        }
       ],
       "lastLogin": "2025-10-12T10:15:00Z"
+    },
+    {
+      "id": 4,
+      "firstName": "Justin",
+      "lastName": "Oden",
+      "email": "justin.oden@gmail.com",
+      "phone": "094424254224",
+      "password": "$2b$10$DZzr2MMRU2d07sjUi1KA1u/iLmKmimvfqHlWgfZmGKH34nZQS7HyG",
+      "role": "user",
+      "createdAt": "2025-09-19T13:21:31.779Z",
+      "profileImage": null,
+      "shippingAddress": "Aung Chan Thar Str",
+      "billingAddress": "",
+      "preferredPaymentMethod": "",
+      "loyaltyPoints": 0,
+      "wishlist": [],
+      "recentOrders": [],
+      "membershipTier": "Bronze",
+      "preferredCategories": [],
+      "cart": [
+        {
+          "productId": 1,
+          "quantity": 2
+        },
+        {
+          "productId": 7,
+          "quantity": 1
+        },
+        {
+          "productId": 21,
+          "quantity": 1
+        },
+        {
+          "productId": 9,
+          "quantity": 1
+        }
+      ],
+      "paymentMethods": [],
+      "lastLogin": ""
     }
   ]
 }

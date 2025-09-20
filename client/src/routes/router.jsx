@@ -10,6 +10,8 @@ import Maintenance from "../pages/Maintenance";
 import ProfilePage from "../pages/ProfilePage";
 
 import "../index.css";
+import AboutPage from "../pages/AboutPage";
+import ContactPage from "../pages/ContactPage";
 
 const isMaintenance = false;
 
@@ -39,7 +41,14 @@ const router = createBrowserRouter(
               path: "/",
               element: <MainPage />,
             },
-            ,
+            {
+              path: "/about",
+              element: <AboutPage />,
+            },
+            {
+              path: "/contact",
+              element: <ContactPage />
+            },
             {
               path: "/cart",
               element: <MarketCart />,

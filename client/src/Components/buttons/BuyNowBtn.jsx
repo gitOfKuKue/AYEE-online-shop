@@ -2,17 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import useCommonFuncs from "../../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
+import useUser from "../../Hook/useUser";
+import useFetchFuncs from "../../Common/useFetchFuncs";
 
 const BuyNowBtn = ({ price, product }) => {
-  const { handleAlert, handleAddCartItem } = useCommonFuncs();
+  const { handleAddCartItem } = useCommonFuncs();
+  const { baseUrl } = useFetchFuncs();
   const navigate = useNavigate();
+  const { data } = useUser();
+  const user = data?.user;
 
   return (
     <StyledWrapper>
       <div
         data-tooltip={`Price: $${price}`}
         className="button cursor-pointer"
-        onClick={() => handleAddCartItem(product, navigate)}
+        onClick={() => handleAddCartItem(user, product, navigate, baseUrl)}
       >
         <div className="button-wrapper">
           <div className="text">Buy Now</div>

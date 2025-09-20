@@ -5,11 +5,19 @@ import ProductCard from "../Components/ProductCard";
 import useCategoryIcons from "../Hook/useCategoryIcons";
 import Navigation from "../Components/EssentialComponents/Navigation";
 import useFetchFuncs from "../Common/useFetchFuncs";
+import useCommonFuncs from "../Common/useCommonFuncs";
+
+import noSearchFoundPic from "../assets/images/no-search-found.svg";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const { categoryIcons, handleCategoryActive } = useCategoryIcons();
-  const {fetchProducts} = useFetchFuncs();
+  const { fetchProducts } = useFetchFuncs();
+  const { searchQuery, setSearchQuery } = useCommonFuncs();
+
+  const results = products.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -25,10 +33,13 @@ const Shop = () => {
   );
 
   // Filter products based on active category
-  const filteredProducts =
+  const filteredProducts = (
     activeCategoryKey === "all"
       ? products
-      : products.filter((product) => product.category === activeCategoryKey);
+      : products.filter((product) => product.category === activeCategoryKey)
+  ).filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Counts
   const productCounts = filteredProducts.length;
@@ -68,6 +79,18 @@ const Shop = () => {
         </div>
 
         {/* Products List */}
+        {filteredProducts.length === 0 && (
+          <div className="">
+            <img
+              src={noSearchFoundPic}
+              alt="No Search Found Pic"
+              className="w-60 m-auto"
+            />
+            <h1 className="text-center text-2xl font-light">
+              No search item found!
+            </h1>
+          </div>
+        )}
         <div className="grid grid-cols-5 gap-2">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Check, ChevronDown, Edit, WandSparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-import defaultProfilePic from "../../assets/icons/defaultProfilePic.png";
+import defaultProfilePic from "../../assets/profiles/defaultProfilePic.png";
 import useCommonFuncs from "../../Common/useCommonFuncs";
 import useFetchFuncs from "../../Common/useFetchFuncs";
 
@@ -17,6 +17,7 @@ import BuyNowBtn from "../buttons/BuyNowBtn";
 import useUser from "../../Hook/useUser";
 
 const UserProfile = () => {
+  const profilePath = "/src/assets/profiles/";
   const maxStars = 5;
 
   const { data } = useUser();
@@ -78,9 +79,9 @@ const UserProfile = () => {
 
               <div className="w-40 h-40 overflow-hidden mx-auto rounded-full border border-border mb-4">
                 <img
-                  src={user.profileImage || defaultProfilePic}
+                  src={`${profilePath}${user?.profileImage || defaultProfilePic}`}
                   alt={`${user.firstName} - profile pic`}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-cover"
                 />
               </div>
 

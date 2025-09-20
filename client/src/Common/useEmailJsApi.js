@@ -1,21 +1,28 @@
 import { create } from "zustand";
 
 const useEmailJsApi = create((set, get) => ({
-  sendEmail: (e, form) => {
-    e.preventDefault();
+  publicKey: "258OS8641r5kw2FUw",
+  sendEmail: (form, emailjs, handleAlert) => {
+    const { publicKey } = get();
+    const serviceId = "service_w13earo";
+    const templateId = "template_w4smkv2";
 
-    emailjs
-      .sendForm("service_mgjv5xd", "template_xi55lji", form.current, {
-        publicKey: "258OS8641r5kw2FUw",
-      })
-      .then(
-        () => {
-          console.log("SUCCESS!");
-        },
-        (error) => {
-          console.log("FAILED...", error.text);
-        }
-      );
+    const templateParam = {
+      name: form.name,
+      email: form.email,
+      message: form.message,
+      time: form.time,
+    };
+
+    emailjs.send(serviceId, templateId, templateParam, publicKey).then(
+      () => {
+        handleAlert("Message sent successfully!", 200);
+        console.log(templateParam);
+      },
+      (error) => {
+        handleAlert(error.text, 500);
+      }
+    );
   },
 }));
 

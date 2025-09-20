@@ -13,7 +13,7 @@ const team = [
 
 const AboutPage = () => {
   return (
-    <main className="bg-gray-50 text-gray-800">
+    <main className="bg-background text-gray-800">
       {/* Hero */}
       <section className="relative bg-gradient-to-r from-iconic to-[#D9E9CF] text-white py-20 px-6 text-center">
         <h1 className="text-5xl font-extrabold mb-4">About Us</h1>
@@ -50,14 +50,14 @@ const AboutPage = () => {
       </section>
 
       {/* Team */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-extrabold mb-10">Meet the Team</h2>
           <div className="">
             {team.map((member) => (
               <div
                 key={member.name}
-                className="bg-gray-100 w-80 mx-auto rounded-xl shadow hover:shadow-lg transition p-6 flex flex-col items-center"
+                className="bg-card-bg w-80 mx-auto rounded-xl shadow hover:shadow-lg transition p-6 flex flex-col items-center"
               >
                 <img
                   src={member.img}

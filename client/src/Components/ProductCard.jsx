@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import BuyNowBtn from "./buttons/BuyNowBtn";
 import Button3 from "./buttons/ViewMoreBtn";
-import { useNavigate } from "react-router";
-import useCommonFuncs from "../Common/useCommonFuncs";
 
 const ProductCard = ({ product }) => {
   const maxStars = 5;

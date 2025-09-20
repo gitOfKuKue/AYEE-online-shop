@@ -3,10 +3,10 @@ import React from "react";
 import done from "../../assets/icons/done.png";
 import fail from "../../assets/icons/fail.png";
 import warning from "../../assets/icons/warning.png";
-import useCommonFuncs from "../../Common/useCommonFuncs";
+import useAlertStore from "../../Common/Store/useAlertStore";
 
 const AlertCard = () => {
-  const { isAlert, alertMessage, alertStatus } = useCommonFuncs();
+  const { isAlert, alertMessage, alertStatus } = useAlertStore();
 
   const alertTypes = {
     200: { title: "Done!", icon: done, color: "#06923E" },

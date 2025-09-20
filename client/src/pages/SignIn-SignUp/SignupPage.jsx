@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import useFetchFuncs from "../../Common/useFetchFuncs";
-import useCommonFuncs from "../../Common/useCommonFuncs";
+import useAlertStore from "../../Common/Store/useAlertStore";
 
 const SignupPage = () => {
   const form = useRef();
@@ -17,7 +17,7 @@ const SignupPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { baseUrl } = useFetchFuncs();
-  const { handleAlert } = useCommonFuncs();
+  const { handleAlert } = useAlertStore();
 
   const [formData, setFormData] = useState({
     firstName: "",

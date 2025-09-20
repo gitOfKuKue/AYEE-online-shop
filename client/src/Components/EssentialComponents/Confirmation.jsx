@@ -1,8 +1,9 @@
 import React from "react";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 
 import yes_no from "../../assets/images/yes_no.svg";
 import { useNavigate } from "react-router";
+import useConfirmationStore from "../../Common/Store/useConfirmationStore";
+import useAuthStore from "../../Common/Store/useAuthStore";
 
 const Confirmation = () => {
   const navigate = useNavigate();
@@ -12,10 +13,10 @@ const Confirmation = () => {
     setIsConfirm,
     confirmMessage,
     confirmStatus,
-    performLogOut,
-  } = useCommonFuncs();
+  } = useConfirmationStore();
+  const { performLogOut } = useAuthStore();
 
-  // Hide / Show 
+  // Hide / Show
   if (!isConfirmation || !confirmStatus) return null;
 
   const handleYes = () => {

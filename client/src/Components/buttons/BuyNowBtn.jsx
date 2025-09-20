@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
 import useUser from "../../Hook/useUser";
 import useFetchFuncs from "../../Common/useFetchFuncs";
+import useCartStore from "../../Common/Store/useCartStore";
 
 const BuyNowBtn = ({ price, product }) => {
-  const { handleAddCartItem } = useCommonFuncs();
+  const { handleAddCartItem } = useCartStore();
   const { baseUrl } = useFetchFuncs();
   const navigate = useNavigate();
   const { data } = useUser();

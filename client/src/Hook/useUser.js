@@ -1,10 +1,10 @@
 // hooks/useUser.js
 import useSWR from "swr";
-import useCommonFuncs from "../Common/useCommonFuncs";
 import { useEffect } from "react";
+import useAuthStore from "../Common/Store/useAuthStore";
 
 export default function useUser() {
-  const { setIsLoggedIn } = useCommonFuncs();
+  const { setIsLoggedIn } = useAuthStore();
   const token = localStorage.getItem("token");
   const userData = localStorage.getItem("user");
 

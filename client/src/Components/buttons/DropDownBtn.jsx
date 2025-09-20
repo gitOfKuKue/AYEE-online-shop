@@ -1,11 +1,11 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { MenuIcon } from "lucide-react";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
+import useConfirmationStore from "../../Common/Store/useConfirmationStore";
 
 export default function DropDownBtn() {
-  const { handleConfirmation } = useCommonFuncs();
+  const { handleConfirmation } = useConfirmationStore();
 
   return (
     <Menu as="div" className="relative inline-block">
@@ -17,7 +17,7 @@ export default function DropDownBtn() {
         transition
         className="absolute right-0 z-10 mt-5 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg outline-1 outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
       >
-        <div className="py-1">
+        {/* <div className="py-1">
           <MenuItem>
             <a
               href="#"
@@ -70,7 +70,7 @@ export default function DropDownBtn() {
               Add to favorites
             </a>
           </MenuItem>
-        </div>
+        </div> */}
         <div
           className="py-1"
           onClick={() =>

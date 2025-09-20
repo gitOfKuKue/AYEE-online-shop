@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
-import useCommonFuncs from "../../Common/useCommonFuncs";
+import useConfirmationStore from "../../Common/Store/useConfirmationStore";
 
 const LogOutBtn = () => {
 
 
-  const { handleConfirmation } = useCommonFuncs();
+  const { handleConfirmation } = useConfirmationStore();
 
   return (
     <StyledWrapper>

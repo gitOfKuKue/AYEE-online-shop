@@ -4,7 +4,7 @@ import Navigation from "./Navigation";
 import Footer from "./Footer";
 import AlertCard from "./AlertCard";
 import Confirmation from "./Confirmation";
-import useCommonFuncs from "../../Common/useCommonFuncs";
+import useConfirmationStore from "../../Common/Store/useConfirmationStore";
 
 const MainLayout = () => {
   const { pathname } = useLocation();
@@ -23,7 +23,7 @@ const MainLayout = () => {
   const hideNavigation = navigationHiddenRoutes.includes(pathname);
   const hideFooter = footerHiddenRoutes.includes(pathname);
 
-  const {isConfirmation} = useCommonFuncs();
+  const {isConfirmation} = useConfirmationStore();
 
   return (
     <main>

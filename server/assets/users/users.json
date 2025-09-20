@@ -18,7 +18,12 @@
       "recentOrders": [],
       "membershipTier": "Bronze",
       "preferredCategories": [],
-      "cart": [],
+      "cart": [
+        {
+          "productId": 2,
+          "quantity": 1
+        }
+      ],
       "paymentMethods": [],
       "lastLogin": ""
     },
@@ -36,7 +41,10 @@
       "billingAddress": "221B Baker Street, London NW1 6XE",
       "preferredPaymentMethod": "PayPal",
       "loyaltyPoints": 145,
-      "wishlist": [5, 7],
+      "wishlist": [
+        5,
+        7
+      ],
       "recentOrders": [
         {
           "productId": 10,
@@ -44,7 +52,10 @@
         }
       ],
       "membershipTier": "Gold",
-      "preferredCategories": ["Fashion", "Travel"],
+      "preferredCategories": [
+        "Fashion",
+        "Travel"
+      ],
       "cart": [
         {
           "productId": 13,
@@ -73,7 +84,10 @@
       "billingAddress": "350 Fifth Avenue, New York, NY 10118",
       "preferredPaymentMethod": "Credit Card",
       "loyaltyPoints": 65,
-      "wishlist": [8, 9],
+      "wishlist": [
+        8,
+        9
+      ],
       "recentOrders": [
         {
           "productId": 14,
@@ -85,7 +99,10 @@
         }
       ],
       "membershipTier": "Silver",
-      "preferredCategories": ["Tech", "Books"],
+      "preferredCategories": [
+        "Tech",
+        "Books"
+      ],
       "cart": [
         {
           "productId": 16,
@@ -141,6 +158,28 @@
           "quantity": 1
         }
       ],
+      "paymentMethods": [],
+      "lastLogin": ""
+    },
+    {
+      "id": 5,
+      "firstName": "Robert ",
+      "lastName": "Adin",
+      "email": "robert.adin@gmail.com",
+      "phone": "02240249204",
+      "password": "$2b$10$jdXuxZxnQmJV4yccW/GGSu4wIV/Ra.NUq1pWWIu4cYeyosWG7JgTy",
+      "role": "user",
+      "createdAt": "2025-09-20T15:29:32.158Z",
+      "profileImage": null,
+      "shippingAddress": "Daik U",
+      "billingAddress": "",
+      "preferredPaymentMethod": "",
+      "loyaltyPoints": 0,
+      "wishlist": [],
+      "recentOrders": [],
+      "membershipTier": "Bronze",
+      "preferredCategories": [],
+      "cart": [],
       "paymentMethods": [],
       "lastLogin": ""
     }

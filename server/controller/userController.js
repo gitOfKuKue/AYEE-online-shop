@@ -2,9 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 
 // Importing users data
 const data = require("../assets/users/users.json");
+const userFile = path.join(__dirname, "../assets/users/users.json");
 
 const app = express();
 
@@ -27,8 +30,6 @@ const getUserById = async (req, res) => {
 
     const user = data.users.find((u) => u.id === parseInt(id));
     res.status(200).json(user);
-
-    console.log(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -71,6 +72,8 @@ const createUser = async (req, res) => {
   // For Encryption
   const saltRounds = 10;
 
+  const userDatas = JSON.parse(fs.readFileSync(userFile, "utf-8"));
+
   try {
     const userData = req.body;
 
@@ -90,7 +93,7 @@ const createUser = async (req, res) => {
     }
 
     // Checking email is already registered or not
-    const isRegistered = data.users.find(
+    const isRegistered = userDatas.users.find(
       (user) => user.email === userData.email
     );
 
@@ -125,7 +128,10 @@ const createUser = async (req, res) => {
       lastLogin: "",
     };
 
-    data.users.push(loggedInUser);
+    userDatas.users.push(loggedInUser);
+
+    // Writing data into json file
+    fs.writeFileSync(userFile, JSON.stringify(userDatas, null, 2));
 
     res
       .status(201)

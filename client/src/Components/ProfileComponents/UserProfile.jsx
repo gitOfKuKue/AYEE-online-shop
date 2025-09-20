@@ -3,7 +3,6 @@ import { Check, ChevronDown, Edit, WandSparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import defaultProfilePic from "../../assets/profiles/defaultProfilePic.png";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import useFetchFuncs from "../../Common/useFetchFuncs";
 
 import bronze from "../../assets/icons/bronze.png";
@@ -15,6 +14,8 @@ import orderNow from "../../assets/images/order-now.svg";
 
 import BuyNowBtn from "../buttons/BuyNowBtn";
 import useUser from "../../Hook/useUser";
+import useCartStore from "../../Common/Store/useCartStore";
+import formatDate from "../../Common/Utils/formatDate";
 
 const UserProfile = () => {
   const profilePath = "/src/assets/profiles/";
@@ -24,7 +25,7 @@ const UserProfile = () => {
   const user = data?.user;
   const token = data?.token;
 
-  const { formatDate, handleAddCartItem } = useCommonFuncs();
+  const { handleAddCartItem } = useCartStore();
   const { fetchProducts } = useFetchFuncs();
 
   const tierIcons = { bronze, silver, gold, platinum };
@@ -79,7 +80,9 @@ const UserProfile = () => {
 
               <div className="w-40 h-40 overflow-hidden mx-auto rounded-full border border-border mb-4">
                 <img
-                  src={`${profilePath}${user?.profileImage || defaultProfilePic}`}
+                  src={`${profilePath}${
+                    user?.profileImage || "defaultProfilePic.png"
+                  }`}
                   alt={`${user.firstName} - profile pic`}
                   className="h-full w-full object-cover"
                 />

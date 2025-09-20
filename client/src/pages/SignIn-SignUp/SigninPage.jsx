@@ -5,8 +5,8 @@ import googlePic from "../../assets/icons/google.png";
 import { data, Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import useFetchFuncs from "../../Common/useFetchFuncs";
+import useAlertStore from "../../Common/Store/useAlertStore";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,8 +25,7 @@ const LoginPage = () => {
   };
 
   const [showPassword, setShowPassword] = useState(false); // 👁 state for toggle
-  const { handleAlert } = useCommonFuncs();
-
+  const { handleAlert } = useAlertStore();
   const { baseUrl } = useFetchFuncs();
 
   // Posting data

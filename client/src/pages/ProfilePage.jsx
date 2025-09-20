@@ -8,7 +8,6 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useCommonFuncs from "../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
 import UserProfile from "../Components/ProfileComponents/UserProfile";
 import LogOutBtn from "../Components/buttons/LogOutBtn";

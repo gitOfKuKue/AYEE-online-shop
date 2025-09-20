@@ -4,8 +4,8 @@ import emptyPic from "../assets/images/Empty-bro.svg";
 import PayBtn from "../Components/buttons/PayBtn";
 import useFetchFuncs from "../Common/useFetchFuncs";
 import ClearBtn from "../Components/buttons/ClearBtn";
-import useCommonFuncs from "../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
+import useCartStore from "../Common/Store/useCartStore";
 
 const MarketCart = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const MarketCart = () => {
   const [cartItems, setCartItems] = useState(user?.cart || []);
 
   const { fetchProducts, baseUrl } = useFetchFuncs();
-  const { handleAddCartItem, handleSubtractCartItem } = useCommonFuncs();
+  const { handleAddCartItem, handleSubtractCartItem } = useCartStore();
   const maxStars = 5;
 
   // fetch product list
@@ -215,11 +215,7 @@ const MarketCart = () => {
                               onChange={(e) =>
                                 handleQuantityChange(item.id, e.target.value)
                               }
-                              className="w-12 text-center border rounded
-                                         appearance-none
-                                         [&::-webkit-inner-spin-button]:appearance-none
-                                         [&::-webkit-outer-spin-button]:appearance-none
-                                         [-moz-appearance:textfield]"
+                              className="w-12 text-center border rounded"
                             />
 
                             <button

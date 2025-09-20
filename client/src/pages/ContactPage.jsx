@@ -4,6 +4,9 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+import useEmailJsApi from "../Common/useEmailJsApi";
+import useAlertStore from "../Common/Store/useAlertStore";
 
 const ContactPage = () => {
   const orgInfos = [
@@ -31,7 +34,11 @@ const ContactPage = () => {
     name: "",
     email: "",
     message: "",
+    time: "",
   });
+
+  const { sendEmail } = useEmailJsApi();
+  const { handleAlert } = useAlertStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,15 +47,26 @@ const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can add your API call or email service logic
-    console.log("Form submitted:", form);
-    alert("Thanks for reaching out! We will contact you soon.");
-    setForm({ name: "", email: "", message: "" });
+    try {
+      const finalForm = { ...form, time: new Date().toISOString() };
+
+      setForm(finalForm); // update state for UI (optional)
+      sendEmail(finalForm, emailjs, handleAlert); // pass correct data immediately
+
+      handleAlert("Thank you for your message!", 200);
+      console.log(finalForm);
+
+      // clear fields but keep time if you wish, or reset completely:
+      setForm({ name: "", email: "", message: "", time: "" });
+    } catch (error) {
+      handleAlert(error.message, 500);
+      console.error(error);
+    }
   };
 
   return (
-    <section className="min-h-screen bg-[#F9F6F3] flex justify-center items-center p-8">
-      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <section className="min-h-screen bg-background flex justify-center items-center p-8">
+      <div className="max-w-6xl w-full bg-card-bg rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         {/* Left Section – Info */}
         <div className="bg-iconic text-font1 p-10 flex flex-col justify-center">
           <h1 className="text-4xl font-bold mb-6">Get in Touch</h1>

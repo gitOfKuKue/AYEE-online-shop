@@ -10,7 +10,7 @@ import {
   faInstagram,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import useCommonFuncs from "../../Common/useCommonFuncs";
+import useAuthStore from "../../Common/Store/useAuthStore";
 
 const Footer = () => {
   const iconsMap = {
@@ -19,7 +19,7 @@ const Footer = () => {
     faTwitter: faTwitter,
   };
 
-  const { isLoggedIn } = useCommonFuncs();
+  const { isLoggedIn } = useAuthStore();
 
   return (
     <>

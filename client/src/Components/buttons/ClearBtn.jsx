@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import { useNavigate } from "react-router";
+import useConfirmationStore from "../../Common/Store/useConfirmationStore";
 
 const ClearBtn = () => {
-  const { handleConfirmation } = useCommonFuncs();
+  const { handleConfirmation } = useConfirmationStore();
   const navigate = useNavigate();
   return (
     <StyledWrapper>

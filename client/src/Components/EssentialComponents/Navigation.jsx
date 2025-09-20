@@ -16,8 +16,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import SignInUpBtn from "../buttons/SingInUpBtn";
 import DropDownBtn from "../buttons/DropDownBtn";
-import useCommonFuncs from "../../Common/useCommonFuncs";
 import useUser from "../../Hook/useUser";
+import useCartStore from "../../Common/Store/useCartStore";
+import useAuthStore from "../../Common/Store/useAuthStore";
+import CustomBtn from "../buttons/CustomBtn";
 
 const Navigation = () => {
   const profilePath = "/src/assets/profiles/";
@@ -43,7 +45,8 @@ const Navigation = () => {
     },
   ]);
 
-  const { isLoggedIn, setSearchQuery } = useCommonFuncs();
+  const { setSearchQuery } = useCartStore();
+  const { isLoggedIn } = useAuthStore();
 
   const { data } = useUser();
   const user = data?.user;
@@ -117,7 +120,7 @@ const Navigation = () => {
               >
                 <img
                   src={`${profilePath}${
-                    user?.profileImage || defaultProfilePic
+                    user?.profileImage || "defaultProfilePic.png"
                   }`}
                   alt={`${user?.firstName || "User"} - profile picture`}
                   className="w-full h-full object-cover"
@@ -140,10 +143,10 @@ const Navigation = () => {
           ) : (
             <div className="flex gap-3">
               <Link to="/sign-in">
-                <SignInUpBtn title="Sign In" />
+                <CustomBtn title="Sign In" />
               </Link>
               <Link to="/sign-up">
-                <SignInUpBtn title="Sign Up" />
+                <CustomBtn title="Sign Up" />
               </Link>
             </div>
           )}

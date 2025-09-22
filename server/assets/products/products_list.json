@@ -329,6 +329,39 @@
       "valid": true,
       "category": "milkshake",
       "price": 4.99
+    },
+    {
+      "id": 31,
+      "title": "cool",
+      "price": "100",
+      "category": "coffee",
+      "description": "cool",
+      "image": null,
+      "rating": 0,
+      "sold": 0,
+      "valid": true
+    },
+    {
+      "id": 32,
+      "title": "Ayee",
+      "price": "200",
+      "category": "smoothie",
+      "description": "lajd;lfdf",
+      "image": "1758471908544.png",
+      "rating": 0,
+      "sold": 0,
+      "valid": true
+    },
+    {
+      "id": 33,
+      "title": "Ayee2",
+      "price": "300",
+      "category": "coffee",
+      "description": "jaldfja;lsdf",
+      "image": "1758471974189.png",
+      "rating": 0,
+      "sold": 0,
+      "valid": true
     }
   ]
 }

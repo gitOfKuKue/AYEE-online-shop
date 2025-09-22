@@ -7,8 +7,11 @@ import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 import useEmailJsApi from "../Common/useEmailJsApi";
 import useAlertStore from "../Common/Store/useAlertStore";
+import useUser from "../Hook/useUser";
 
 const ContactPage = () => {
+  const { data } = useUser();
+  const user = data?.user;
   const orgInfos = [
     {
       id: 1,
@@ -31,8 +34,8 @@ const ContactPage = () => {
     },
   ];
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: `${user ? user.firstName + " " + user.lastName : ""}`,
+    email: `${user ? user.email : ""}`,
     message: "",
     time: "",
   });

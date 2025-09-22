@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import BuyNowBtn from "./buttons/BuyNowBtn";
 import Button3 from "./buttons/ViewMoreBtn";
+import useFetchFuncs from "../Common/useFetchFuncs";
 
 const ProductCard = ({ product }) => {
   const maxStars = 5;
+  const {baseUrl} = useFetchFuncs();
 
   return (
     <div className="w-full h-[480px] flex flex-col border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white">
       {/* Image */}
       <div className="w-full h-1/2 overflow-hidden">
         <img
-          src={product.image}
+          src={`${baseUrl}/uploads/${product.image}`}
           alt={product.title}
           className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
         />

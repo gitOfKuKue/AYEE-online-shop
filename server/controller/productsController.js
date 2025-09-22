@@ -1,62 +1,59 @@
 const fs = require("fs");
 const path = require("path");
 
-const data = require("../assets/products/products_list.json");
-const productFile = path.join(
-  __dirname,
-  "../assets/products/products_list.json"
-);
-const products = data.products;
+// ✅ Correct relative path
+const productFile = path.join(__dirname, "..", "assets", "products", "products_list.json");
 
-// Getting all products
-const getProducts = async (req, res) => {
-  try {
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+// Load existing products or start empty
+let products = [];
+if (fs.existsSync(productFile)) {
+  products = JSON.parse(fs.readFileSync(productFile, "utf-8")).products || [];
+}
+
+const getProducts = (req, res) => {
+  res.json(products);
 };
 
-// Getting item by ID
-const getProductById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const item = products.find((i) => i.id === parseInt(id));
-    console.log(item);
-    res.status(200).json(item);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+const getProductById = (req, res) => {
+  const product = products.find((p) => p.id === parseInt(req.params.id, 10));
+  if (!product) return res.status(404).json({ message: "Product not found" });
+  res.json(product);
 };
 
-// Create new product
-const createProduct = async (req, res) => {
+const createProduct = (req, res) => {
   try {
-    const createdProduct = req.body;
+    const { title, price, category, description } = req.body;
+    const imageName = req.file ? req.file.filename : null; // only store filename
 
-    const formattedProduct = {
+    const newProduct = {
       id: products.length + 1,
-      title: createdProduct.title,
-      description: createdProduct.description,
-      image: createdProduct.image,
+      title,
+      price,
+      category,
+      description,
+      image: imageName,
       rating: 0,
       sold: 0,
       valid: true,
-      category: createdProduct.category,
-      price: createdProduct.price,
     };
 
-    products.push(formattedProduct);
+    products.push(newProduct);
 
-    fs.writeFileSync(
-      productFile,
-      JSON.stringify({ products: products }, null, 2)
-    );
+    // ✅ Save and immediately update the in-memory list
+    fs.writeFileSync(productFile, JSON.stringify({ products }, null, 2));
+    // (optional) reload to guarantee sync if multiple processes are writing
+    products = JSON.parse(fs.readFileSync(productFile, "utf-8")).products;
 
-    res.status(200).json({message: "New products is added successfully!", prodcuts: products});
+    // ✅ Send back the updated products list so the frontend can refresh immediately
+    res.status(201).json({
+      message: "Product created successfully!",
+      product: newProduct,
+      products,   // include updated list for instant refresh
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = { getProducts, getProductById, createProduct };

@@ -100,4 +100,23 @@ const adjustQuantity = async (req, res) => {
   }
 };
 
-module.exports = { addCartItem, adjustQuantity };
+// Delete all prodcuts in cart
+const deleteAllProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userDatas = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
+    const user = userDatas.users.find((user) => user.id === Number(id));
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    user.cart = [];
+
+    fs.writeFileSync(usersFile, JSON.stringify(userDatas, null, 2));
+    res.status(200).json({ message: "Clear all product!", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { addCartItem, adjustQuantity, deleteAllProducts };

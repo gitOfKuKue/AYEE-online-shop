@@ -11,13 +11,13 @@ const usersFile = path.join(__dirname, "../assets/users/users.json");
 const addCartItem = async (req, res) => {
   const userDatas = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
   try {
-    const userId = parseInt(req.params.id, 10); // :id from URL
-    const { productId, quantity } = req.body; // from request body
+    const userId = parseInt(req.params.id, 10); // user id remains numeric
+    const { productId, quantity } = req.body;   // productId will be a string
 
-    if (!productId || !quantity) {
+    if (!productId || typeof quantity !== "number") {
       return res
         .status(400)
-        .json({ error: "productId and quantity are required" });
+        .json({ error: "productId (string) and quantity (number) are required" });
     }
 
     // Find the user
@@ -27,7 +27,7 @@ const addCartItem = async (req, res) => {
     }
 
     // Push the new item into the user's cart
-    user.cart.push({ productId, quantity });
+    user.cart.push({ productId: String(productId), quantity });
 
     // Persist changes back to the JSON file
     fs.writeFileSync(usersFile, JSON.stringify(userDatas, null, 2));
@@ -42,13 +42,14 @@ const addCartItem = async (req, res) => {
   }
 };
 
-// ✅ Adjust the quantity of a product in a user's cart
-//    - Increase or decrease depending on the `action` sent in body
-//    - Remove the item if quantity reaches 0
+/**
+ * PATCH /api/users/:id/cart/quantity
+ * Increase or decrease a product quantity in a user's cart
+ */
 const adjustQuantity = async (req, res) => {
   try {
     const userDatas = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
-    const userId = Number(req.params.id);
+    const userId = parseInt(req.params.id, 10);
     const { productId, action } = req.body; // action: "increment" | "decrement"
 
     if (!productId) {
@@ -66,9 +67,9 @@ const adjustQuantity = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // ---- Find product in cart ----
+    // ---- Find product in cart (compare as string) ----
     const cartItem = user.cart.find(
-      (item) => Number(item.productId) === Number(productId)
+      (item) => String(item.productId) === String(productId)
     );
     if (!cartItem) {
       return res.status(404).json({ message: "Product not found in cart" });
@@ -82,7 +83,7 @@ const adjustQuantity = async (req, res) => {
       // remove item completely if quantity <= 0
       if (cartItem.quantity <= 0) {
         user.cart = user.cart.filter(
-          (item) => Number(item.productId) !== Number(productId)
+          (item) => String(item.productId) !== String(productId)
         );
       }
     }
@@ -92,7 +93,7 @@ const adjustQuantity = async (req, res) => {
 
     return res.status(200).json({
       message: "Cart updated successfully",
-      user, // return the updated user or just user.cart if you prefer
+      user,
     });
   } catch (error) {
     console.error(error);
@@ -100,7 +101,10 @@ const adjustQuantity = async (req, res) => {
   }
 };
 
-// Delete all prodcuts in cart
+/**
+ * DELETE /api/users/:id/cart
+ * Delete all products in a user's cart
+ */
 const deleteAllProducts = async (req, res) => {
   try {
     const { id } = req.params;
@@ -113,7 +117,7 @@ const deleteAllProducts = async (req, res) => {
     user.cart = [];
 
     fs.writeFileSync(usersFile, JSON.stringify(userDatas, null, 2));
-    res.status(200).json({ message: "Clear all product!", user });
+    res.status(200).json({ message: "Cleared all products!", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

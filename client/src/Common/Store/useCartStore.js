@@ -8,7 +8,7 @@ const useCartStore = create((set, get) => ({
 
   handleAddCartItem: async (user, product, navigate, baseUrl) => {
     const { handleAlert } = useAlertStore.getState();
-    const productId = Number(product.id);
+    const productId = String(product.id);          // ✅ productId is now always a string
 
     if (!user) {
       handleAlert("Please sign in first!", 404);
@@ -16,13 +16,15 @@ const useCartStore = create((set, get) => ({
       return;
     }
 
+    // ✅ compare as string
     const alreadyInCart = user?.cart?.find(
-      (item) => Number(item.productId) === productId
+      (item) => String(item.productId) === productId
     );
 
     try {
       if (!alreadyInCart) {
         const newCartItem = { productId, quantity: 1 };
+
         const res = await fetch(`${baseUrl}/api/users/${user.id}/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -34,6 +36,7 @@ const useCartStore = create((set, get) => ({
           ...user,
           cart: [...(user.cart || []), newCartItem],
         };
+
         localStorage.setItem("user", JSON.stringify({ user: updatedUser }));
         mutate(
           "local-user",
@@ -46,11 +49,11 @@ const useCartStore = create((set, get) => ({
         await fetch(`${baseUrl}/api/users/${user.id}/cart/quantity`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productId: product.id, action: "increment" }),
+          body: JSON.stringify({ productId, action: "increment" }), // ✅ productId stays string
         });
 
         const updatedCart = user.cart.map((item) =>
-          Number(item.productId) === productId
+          String(item.productId) === productId
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -73,13 +76,13 @@ const useCartStore = create((set, get) => ({
 
   handleSubtractCartItem: async (user, product, baseUrl) => {
     const { handleAlert } = useAlertStore.getState();
-    const productId = Number(product.id);
+    const productId = String(product.id);          // ✅ keep it as string
 
     try {
       await fetch(`${baseUrl}/api/users/${user.id}/cart/quantity`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: product.id, action: "decrement" }),
+        body: JSON.stringify({ productId, action: "decrement" }), // ✅ string
       });
 
       mutate(
@@ -89,7 +92,7 @@ const useCartStore = create((set, get) => ({
 
           const updatedCart = current.user.cart
             .map((item) =>
-              Number(item.productId) === productId
+              String(item.productId) === productId
                 ? { ...item, quantity: item.quantity - 1 }
                 : item
             )

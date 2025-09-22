@@ -18,12 +18,7 @@
       "recentOrders": [],
       "membershipTier": "Bronze",
       "preferredCategories": [],
-      "cart": [
-        {
-          "productId": 1,
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "paymentMethods": [],
       "lastLogin": ""
     },
@@ -41,10 +36,7 @@
       "billingAddress": "221B Baker Street, London NW1 6XE",
       "preferredPaymentMethod": "PayPal",
       "loyaltyPoints": 145,
-      "wishlist": [
-        5,
-        7
-      ],
+      "wishlist": [5, 7],
       "recentOrders": [
         {
           "productId": 10,
@@ -52,10 +44,7 @@
         }
       ],
       "membershipTier": "Gold",
-      "preferredCategories": [
-        "Fashion",
-        "Travel"
-      ],
+      "preferredCategories": ["Fashion", "Travel"],
       "cart": [
         {
           "productId": 13,
@@ -84,10 +73,7 @@
       "billingAddress": "350 Fifth Avenue, New York, NY 10118",
       "preferredPaymentMethod": "Credit Card",
       "loyaltyPoints": 65,
-      "wishlist": [
-        8,
-        9
-      ],
+      "wishlist": [8, 9],
       "recentOrders": [
         {
           "productId": 14,
@@ -99,10 +85,7 @@
         }
       ],
       "membershipTier": "Silver",
-      "preferredCategories": [
-        "Tech",
-        "Books"
-      ],
+      "preferredCategories": ["Tech", "Books"],
       "cart": [
         {
           "productId": 16,

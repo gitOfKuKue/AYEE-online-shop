@@ -17,14 +17,14 @@ const ProductDetails = () => {
   const user = data?.user;
 
   const { id } = useParams();
-  const productId = parseInt(id, 10);
+  console.log(id);
   const maxStars = 5;
 
   const { products, fetchProducts, baseUrl, productImagePath } = useAPICalling();
   const [isEdit, setIsEdit] = useState(false);
   const { handleAlert } = useAlertStore();
 
-  const product = products?.find((p) => p.id === productId);
+  const product = products?.find((p) => p.id === id);
 
   const [formData, setFormData] = useState({
     title: "",

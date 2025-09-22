@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { default: useGenerateId } = require("../common/useGenerateId");
 
 // ✅ Correct relative path
 const productFile = path.join(
@@ -28,11 +29,13 @@ const getProductById = (req, res) => {
 
 const createProduct = (req, res) => {
   try {
-    const { title, price, quantity, category, description } = req.body;
+    const { title, price, quantity, category, description, time } = req.body;
     const imageName = req.file ? req.file.filename : null; // only store filename
 
+    const id = useGenerateId("product", title, time, category);
+
     const newProduct = {
-      id: products.length + 1,
+      id,
       title,
       price: parseFloat(price),
       quantity: Number(quantity),
@@ -42,6 +45,7 @@ const createProduct = (req, res) => {
       rating: 0,
       sold: 0,
       valid: true,
+      time,
     };
 
     products.push(newProduct);

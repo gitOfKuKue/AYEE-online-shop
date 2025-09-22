@@ -16,14 +16,16 @@ const Shop = () => {
 
   const [isAdding, setIsAdding] = useState(false);
 
-  // ✅ Fetch products when component mounts
+  // ✅ Fetch all products on first render
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  // ✅ Build category menu whenever products change
+  // ✅ Build or rebuild category menu whenever products update
   useEffect(() => {
-    const newCategories = categories(products);
+    if (!products) return;
+
+    const newCategories = categories(products); // returns array of category names
     if (Array.isArray(newCategories)) {
       setCategoryMenus([
         { title: "All", isCurrent: true },
@@ -32,14 +34,16 @@ const Shop = () => {
     }
   }, [products, categories, setCategoryMenus]);
 
-  // ✅ When a new product is added, refetch products
+  // ✅ Called when a product is successfully added
   const handleProductAdded = async () => {
-    await fetchProducts();
-    setIsAdding(false);
+    await fetchProducts();          // 🔥 Refresh products list
+    setIsAdding(false);             // close Add form
+    // 👉 categoryMenus will auto-update because of the effect above
   };
 
   return (
     <section>
+      {/* ---------- Sidebar: Categories ---------- */}
       <aside className="flex flex-col py-5 fixed h-[calc(100vh-5em)] shadow-lg w-[250px]">
         <div className="flex flex-col font-bold">
           {categoryMenus.map((menu) => (
@@ -50,7 +54,7 @@ const Shop = () => {
               }`}
               onClick={() => {
                 handleCategoryActive(menu.title);
-                setIsAdding(false);
+                setIsAdding(false); // close Add form when switching category
               }}
             >
               <h1>{menu.title}</h1>
@@ -58,6 +62,7 @@ const Shop = () => {
           ))}
         </div>
 
+        {/* ---------- Admin: Add Product Button ---------- */}
         {user?.role === "admin" && (
           <div className="mt-auto py-3 px-5" onClick={() => setIsAdding(true)}>
             <AddBtn />
@@ -65,6 +70,7 @@ const Shop = () => {
         )}
       </aside>
 
+      {/* ---------- Main Content ---------- */}
       <section className="w-[calc(100%-250px)] h-[calc(100vh-5em)] ml-[250px] p-5">
         {!isAdding && (
           <ProductsShop products={products} categoryMenus={categoryMenus} />

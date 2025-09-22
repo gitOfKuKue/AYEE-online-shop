@@ -1,4 +1,4 @@
-import { DollarSign, ImagePlus } from "lucide-react";
+import { Cross, DollarSign, ImagePlus, X } from "lucide-react";
 import React, { useState } from "react";
 import CustomBtn from "./buttons/CustomBtn";
 import useAPICalling from "../Common/useAPICalling";
@@ -9,8 +9,9 @@ import AddIconBtn from "./buttons/AddIconBtn";
 
 const ProductAddSection = () => {
   const fileInputRef = useRef(null);
-  const { baseUrl } = useAPICalling();
+  const { baseUrl, fetchProducts } = useAPICalling();
   const { handleAlert } = useAlertStore();
+  const [isAddCategory, setIsAddCategory] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -42,12 +43,16 @@ const ProductAddSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Taking now
+    const time = new Date();
+
     const fd = new FormData();
     fd.append("title", formData.title);
     fd.append("price", formData.price);
     fd.append("quantity", formData.quantity);
     fd.append("category", formData.category);
     fd.append("description", formData.description);
+    fd.append("time", time);
     if (formData.imageFile) fd.append("image", formData.imageFile); // send the file
 
     const res = await fetch(`${baseUrl}/api/products`, {
@@ -67,9 +72,14 @@ const ProductAddSection = () => {
         category: "",
         price: "",
       });
+      await fetchProduct();
     } else {
       handleAlert(data.message || "Failed to add product!", 400);
     }
+  };
+
+  const handleAddCategory = () => {
+    setIsAddCategory(!isAddCategory);
   };
 
   return (
@@ -185,24 +195,48 @@ const ProductAddSection = () => {
               >
                 Product Category
               </label>
-              <div className="flex gap-2 items-center">
-                <select
-                  name="category"
-                  id="category"
-                  className="border border-border p-3 rounded-[var(--standard-radius)] w-full focus:ring-2 focus:ring-blue-300 focus:outline-none"
-                  value={formData.category}
-                  onChange={handleChange}
-                >
-                  <option value="" disabled>
-                    Select category
-                  </option>
-                  {categories(products).map((category) => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-
-                <AddIconBtn type="button" />
-              </div>
+              {isAddCategory ? (
+                <div className="relative flex items-center">
+                  <input
+                    id="category"
+                    name="category"
+                    type="text"
+                    placeholder="e.g. Fruit, Vehicle"
+                    className="border border-border p-3 rounded-[var(--standard-radius)] w-full focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                    value={formData.category}
+                    onChange={handleChange}
+                  />
+                  <X
+                    className="absolute right-2 text-font2-light hover:text-font2 cursor-pointer"
+                    onClick={handleAddCategory}
+                  />
+                </div>
+              ) : (
+                <div className="flex h-[50px] items-center gap-2">
+                  <select
+                    name="category"
+                    id="category"
+                    className="border border-border p-3 rounded-[var(--standard-radius)] w-full focus:ring-2 focus:ring-blue-300 focus:outline-none h-full"
+                    value={formData.category}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Select category
+                    </option>
+                    {categories(products).map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                  <div
+                    className="w-[35px] h-[35px]"
+                    onClick={handleAddCategory}
+                  >
+                    <AddIconBtn type="button" />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Description */}
@@ -227,7 +261,12 @@ const ProductAddSection = () => {
 
         {/* ✅ Submit Button */}
         <div className="mt-8 flex justify-end">
-          <CustomBtn title="Add" type="submit" status={200} className="px-6 py-3" />
+          <CustomBtn
+            title="Add"
+            type="submit"
+            status={200}
+            className="px-6 py-3"
+          />
         </div>
       </form>
     </div>

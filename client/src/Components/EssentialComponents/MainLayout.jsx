@@ -21,9 +21,11 @@ const MainLayout = () => {
 
   // ✅ Check if current route is in those arrays
   const hideNavigation = navigationHiddenRoutes.includes(pathname);
-  const hideFooter = footerHiddenRoutes.includes(pathname);
+  const hideFooter =
+    footerHiddenRoutes.includes(pathname) ||
+    pathname.startsWith("/product-detail");
 
-  const {isConfirmation} = useConfirmationStore();
+  const { isConfirmation } = useConfirmationStore();
 
   return (
     <main>

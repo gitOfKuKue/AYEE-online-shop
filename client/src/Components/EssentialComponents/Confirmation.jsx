@@ -34,18 +34,17 @@ const Confirmation = () => {
   };
 
   return (
-    <div className="fixed bg-[#FFFFF0] top-1/2 left-1/2 w-100 shadow-xl p-3 rounded-[var(--standard-radius)] -translate-1/2">
-      <img src={yes_no} alt="Confirmation Pic" className="w-50 mx-auto" />
-      <h1 className="text-center text-xl mb-5">{confirmMessage}</h1>
-      <div className="flex justify-evenly items-center">
+    <div className="fixed bg-[var(--gray--)] top-1/2 left-1/2 w-100 shadow-xl rounded-[var(--standard-radius)] -translate-1/2">
+      <h1 className="text-center text-xl my-5">{confirmMessage}</h1>
+      <div className="grid grid-cols-2 w-full items-center">
         <button
-          className="w-30 h-10 rounded-[var(--standard-radius)] cursor-pointer text-font1 bg-[#06923E] hover:bg-gray-500"
+          className="w-full py-2 rounded-bl-[var(--standard-radius)] cursor-pointer text-font1 mx-auto hover:bg-gray-400 hover:text-green-400"
           onClick={handleYes}
         >
           Yes
         </button>
         <button
-          className="w-30 h-10 rounded-[var(--standard-radius)] cursor-pointer text-font1 bg-[#E62727] hover:bg-gray-500"
+          className="w-full py-2 rounded-br-[var(--standard-radius)]  cursor-pointer text-font1 mx-auto   hover:bg-gray-400 hover:text-red-400"
           onClick={handleNo}
         >
           No

@@ -12,6 +12,7 @@ import ProfilePage from "../pages/ProfilePage";
 import "../index.css";
 import AboutPage from "../pages/AboutPage";
 import ContactPage from "../pages/ContactPage";
+import ProductDetails from "../Components/ProductDetail";
 
 const isMaintenance = false;
 
@@ -47,7 +48,7 @@ const router = createBrowserRouter(
             },
             {
               path: "/contact",
-              element: <ContactPage />
+              element: <ContactPage />,
             },
             {
               path: "/cart",
@@ -56,6 +57,10 @@ const router = createBrowserRouter(
             {
               path: "/shop",
               element: <Shop />,
+            },
+            {
+              path: "/product-detail/:id",
+              element: <ProductDetails />,
             },
             {
               path: "/profile",

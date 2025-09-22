@@ -6,19 +6,10 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button1 from "./buttons/button1";
 import { Link } from "react-router-dom";
-import useFetchFuncs from "../Common/useFetchFuncs";
+import useAPICalling from "../Common/useAPICalling";
 
 const ProductCardsSection = () => {
-  const [products, setProducts] = useState([]);
-  const { fetchProducts } = useFetchFuncs();
-
-  useEffect(() => {
-    const loadPorduct = async () => {
-      const data = await fetchProducts();
-      setProducts(data);
-    };
-    loadPorduct();
-  }, []);
+  const { products } = useAPICalling();
 
   // Counts
   const productCounts = products.length;

@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import useUser from "../../Hook/useUser";
-import useFetchFuncs from "../../Common/useFetchFuncs";
+import useFetchFuncs from "../../Common/useAPICalling";
 import useCartStore from "../../Common/Store/useCartStore";
 
-const BuyNowBtn = ({ price, product }) => {
+const BuyNowBtn = ({ price, product, className }) => {
   const { handleAddCartItem } = useCartStore();
   const { baseUrl } = useFetchFuncs();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const BuyNowBtn = ({ price, product }) => {
     <StyledWrapper>
       <div
         data-tooltip={`Price: $${price}`}
-        className="button cursor-pointer"
+        className={`${className} button cursor-pointer`}
         onClick={() => handleAddCartItem(user, product, navigate, baseUrl)}
       >
         <div className="button-wrapper">

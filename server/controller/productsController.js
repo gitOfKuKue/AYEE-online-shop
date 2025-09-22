@@ -2,7 +2,13 @@ const fs = require("fs");
 const path = require("path");
 
 // ✅ Correct relative path
-const productFile = path.join(__dirname, "..", "assets", "products", "products_list.json");
+const productFile = path.join(
+  __dirname,
+  "..",
+  "assets",
+  "products",
+  "products_list.json"
+);
 
 // Load existing products or start empty
 let products = [];
@@ -22,13 +28,14 @@ const getProductById = (req, res) => {
 
 const createProduct = (req, res) => {
   try {
-    const { title, price, category, description } = req.body;
+    const { title, price, quantity, category, description } = req.body;
     const imageName = req.file ? req.file.filename : null; // only store filename
 
     const newProduct = {
       id: products.length + 1,
       title,
-      price,
+      price: parseFloat(price),
+      quantity: Number(quantity),
       category,
       description,
       image: imageName,
@@ -48,12 +55,45 @@ const createProduct = (req, res) => {
     res.status(201).json({
       message: "Product created successfully!",
       product: newProduct,
-      products,   // include updated list for instant refresh
+      products, // include updated list for instant refresh
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+const updateProduct = (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, price, category, quantity } = req.body;
 
-module.exports = { getProducts, getProductById, createProduct };
+    const index = products.findIndex((p) => p.id === parseInt(id, 10));
+    if (index === -1) {
+      return res.status(404).json({ message: "Product not found!" });
+    }
+
+    // Update fields
+    products[index] = {
+      ...products[index],
+      title,
+      description,
+      price: Number(price),
+      quantity: Number(quantity),
+      category,
+      // If a new file is uploaded, update the image filename
+      ...(req.file && { image: req.file.filename }),
+    };
+
+    // Save back to JSON file
+    fs.writeFileSync(productFile, JSON.stringify({ products }, null, 2));
+
+    res.status(200).json({
+      message: "Product updated successfully!",
+      product: products[index],
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct };

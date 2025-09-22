@@ -23,6 +23,7 @@ const {
   getProducts,
   getProductById,
   createProduct,
+  updateProduct,
 } = require("../controller/productsController");
 
 const router = express.Router();
@@ -30,5 +31,6 @@ const router = express.Router();
 router.get("/products", getProducts);
 router.get("/products/:id", getProductById);
 router.post("/products", upload.single("image"), createProduct);
+router.put("/products/:id", upload.single("image"), updateProduct);
 
 module.exports = router;

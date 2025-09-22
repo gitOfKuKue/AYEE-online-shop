@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import BuyNowBtn from "./buttons/BuyNowBtn";
 import Button3 from "./buttons/ViewMoreBtn";
-import useFetchFuncs from "../Common/useFetchFuncs";
+import useAPICalling from "../Common/useAPICalling";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const maxStars = 5;
-  const {baseUrl} = useFetchFuncs();
+  const { productImagePath} = useAPICalling();
 
   return (
     <div className="w-full h-[480px] flex flex-col border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white">
       {/* Image */}
       <div className="w-full h-1/2 overflow-hidden">
         <img
-          src={`${baseUrl}/uploads/${product.image}`}
+          src={productImagePath(product.image)}
           alt={product.title}
           className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
         />
@@ -64,9 +65,9 @@ const ProductCard = ({ product }) => {
         {/* Buttons */}
         <div className="flex items-center mt-auto">
           <BuyNowBtn price={product.price} product={product} />
-          <div>
+          <Link to={`/product-detail/${product.id}`}>
             <Button3 title="View More" />
-          </div>
+          </Link>
         </div>
       </div>
     </div>

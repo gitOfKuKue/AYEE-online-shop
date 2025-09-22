@@ -5,7 +5,7 @@ import googlePic from "../../assets/icons/google.png";
 import { data, Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import useFetchFuncs from "../../Common/useFetchFuncs";
+import useFetchFuncs from "../../Common/useAPICalling";
 import useAlertStore from "../../Common/Store/useAlertStore";
 
 const LoginPage = () => {

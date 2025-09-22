@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { create } from "zustand";
 import useUser from "../Hook/useUser";
 import AddBtn from "../Components/buttons/AddBtn";
 import ProductsShop from "../Components/ProductsShop";
 import ProductAddSection from "../Components/ProductAddSection";
 import useCategory from "../Common/useCategory";
-import useFetchFuncs from "../Common/useFetchFuncs";
+import useAPICalling from "../Common/useAPICalling";
 
-/* -------------------- Shop component -------------------- */
 const Shop = () => {
   const { data } = useUser();
   const user = data?.user;
 
-  const { fetchProducts } = useFetchFuncs();
+  const { products, fetchProducts } = useAPICalling();
   const { categories, handleCategoryActive, categoryMenus, setCategoryMenus } =
     useCategory();
 
   const [isAdding, setIsAdding] = useState(false);
-  const [products, setProducts] = useState([]);
 
-  // load products when the page mounts
+  // ✅ Fetch products when component mounts
   useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchProducts();
-      setProducts(data);
-    };
-    loadProducts();
+    fetchProducts();
   }, [fetchProducts]);
 
-  // build category menu from products
+  // ✅ Build category menu whenever products change
   useEffect(() => {
     const newCategories = categories(products);
     if (Array.isArray(newCategories)) {
@@ -39,10 +32,9 @@ const Shop = () => {
     }
   }, [products, categories, setCategoryMenus]);
 
-  // re-fetch products after adding a product
+  // ✅ When a new product is added, refetch products
   const handleProductAdded = async () => {
-    const updated = await fetchProducts();
-    setProducts(updated);
+    await fetchProducts();
     setIsAdding(false);
   };
 

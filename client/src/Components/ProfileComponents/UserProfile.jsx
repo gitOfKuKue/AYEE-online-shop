@@ -3,7 +3,7 @@ import { Check, ChevronDown, Edit, WandSparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import defaultProfilePic from "../../assets/profiles/defaultProfilePic.png";
-import useFetchFuncs from "../../Common/useFetchFuncs";
+import useFetchFuncs from "../../Common/useAPICalling";
 
 import bronze from "../../assets/icons/bronze.png";
 import silver from "../../assets/icons/silver.png";

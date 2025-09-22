@@ -2,38 +2,36 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 
 import noSearchFoundPic from "../assets/images/no-search-found.svg";
-import useFetchFuncs from "../Common/useFetchFuncs";
+import useAPICalling from "../Common/useAPICalling";
+import useCategory from "../Common/useCategory";
 import useCartStore from "../Common/Store/useCartStore";
-import useCategoryIcons from "../Hook/useCategoryIcons";
 
 const ProductsShop = () => {
-  const [products, setProducts] = useState([]);
-
-  const { categoryIcons } = useCategoryIcons();
-
-  const { fetchProducts } = useFetchFuncs();
+  const { categoryMenus } = useCategory();
+  const { products, setProducts, fetchProducts } = useAPICalling();
   const { searchQuery } = useCartStore();
 
+
   useEffect(() => {
-    const loadProduct = async () => {
+    const loadProducts = async () => {
       const data = await fetchProducts();
       setProducts(data);
     };
-    loadProduct();
-  }, []);
+    loadProducts();
+  }, [fetchProducts]);
 
   // Find the active category key
-  const activeCategoryKey = Object.keys(categoryIcons).find(
-    (key) => categoryIcons[key].isCurrent
-  );
+  const activeCategoryKey = categoryMenus.find((key) => key.isCurrent);
 
   // Filter products based on active category
   const filteredProducts = (
-    activeCategoryKey === "all"
+    activeCategoryKey.title === "All"
       ? products
-      : products.filter((product) => product.category === activeCategoryKey)
-  ).filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      : products.filter(
+          (product) => product.category === activeCategoryKey.title
+        )
+  )?.filter((item) =>
+    item.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Counts

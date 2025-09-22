@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
-import useFetchFuncs from "../../Common/useFetchFuncs";
+import useFetchFuncs from "../../Common/useAPICalling";
 import useAlertStore from "../../Common/Store/useAlertStore";
 
 const SignupPage = () => {

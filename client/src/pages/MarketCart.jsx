@@ -2,44 +2,37 @@ import React, { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import emptyPic from "../assets/images/Empty-bro.svg";
 import PayBtn from "../Components/buttons/PayBtn";
-import useFetchFuncs from "../Common/useFetchFuncs";
-import ClearBtn from "../Components/buttons/ClearBtn";
+import useAPICalling from "../Common/useAPICalling";
 import { useNavigate } from "react-router";
 import useCartStore from "../Common/Store/useCartStore";
+import useUser from "../Hook/useUser";
 
 const MarketCart = () => {
   const navigate = useNavigate();
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser).user : null;
 
-  const [shippingFee] = useState(10);
-  const [discount] = useState(20);
+  const {data} = useUser();
+  const user = data?.user;
+
+  const [shippingFee, setShippingFee] = useState(user?.cart ? 10 : 0);
+  const [discount, setDiscount] = useState(user?.cart ? 20 : 0);
   const [tax] = useState(0);
 
-  const [products, setProducts] = useState([]);
   // ✅ make cartItems reactive
   const [cartItems, setCartItems] = useState(user?.cart || []);
 
-  const { fetchProducts, baseUrl } = useFetchFuncs();
+  const { products, setProducts, fetchProducts, baseUrl, productImagePath } = useAPICalling();
   const { handleAddCartItem, handleSubtractCartItem } = useCartStore();
-  const maxStars = 5;
 
-  // fetch product list
+  // ✅ fetch products and store them
   useEffect(() => {
     let mounted = true;
     const loadProducts = async () => {
-      try {
-        const data = await fetchProducts();
-        if (mounted) setProducts(data || []);
-      } catch (error) {
-        console.error(error?.message || error);
-      }
+      const data = await fetchProducts();
+      if (mounted) setProducts(data); // now data is array
     };
     loadProducts();
-    return () => {
-      mounted = false;
-    };
-  }, [fetchProducts]);
+    return () => { mounted = false; };
+  }, [fetchProducts, setProducts]);
 
   const [productsInCart, setProductsInCart] = useState([]);
 
@@ -47,17 +40,14 @@ const MarketCart = () => {
   useEffect(() => {
     if (!products || !cartItems) return;
     const merged = products
-      .filter((product) =>
-        cartItems.some((item) => item.productId === product.id)
+      .filter(product =>
+        cartItems.some(item => Number(item.productId) === Number(product.id))
       )
-      .map((product) => {
+      .map(product => {
         const cartItem = cartItems.find(
-          (item) => item.productId === product.id
+          item => Number(item.productId) === Number(product.id)
         );
-        return {
-          ...product, // product fields
-          ...cartItem, // e.g. quantity
-        };
+        return { ...product, ...cartItem };
       });
     setProductsInCart(merged);
   }, [products, cartItems]);
@@ -65,39 +55,41 @@ const MarketCart = () => {
   const subtractQuantity = async (item) => {
     try {
       await handleSubtractCartItem(user, item, baseUrl);
-      setCartItems((prev) =>
+      setCartItems(prev =>
         prev
-          .map((ci) =>
-            ci.productId === item.id ? { ...ci, quantity: ci.quantity - 1 } : ci
+          .map(ci =>
+            Number(ci.productId) === Number(item.id)
+              ? { ...ci, quantity: ci.quantity - 1 }
+              : ci
           )
-          // 🔑 remove item if quantity ≤ 0
-          .filter((ci) => ci.quantity > 0)
+          .filter(ci => ci.quantity > 0)
       );
+      setShippingFee(0);
+      setDiscount(0);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const handleQuantityChange = (id, rawValue) => {
+  const handleQuantityChange = (productId, rawValue) => {
     const value = Math.max(0, Number(rawValue) || 0);
-    setCartItems((prev) =>
-      prev.map((item) =>
-        Number(item.productId) === Number(id)
+    setCartItems(prev =>
+      prev.map(item =>
+        Number(item.productId) === Number(productId)
           ? { ...item, quantity: value }
           : item
       )
     );
   };
 
-  // ✅ add quantity both on server and local state
   const addQuantity = async (item) => {
     try {
       await handleAddCartItem(user, item, navigate, baseUrl);
-      setCartItems((prev) => {
-        const exists = prev.find((ci) => ci.productId === item.id);
+      setCartItems(prev => {
+        const exists = prev.find(ci => Number(ci.productId) === Number(item.id));
         return exists
-          ? prev.map((ci) =>
-              ci.productId === item.id
+          ? prev.map(ci =>
+              Number(ci.productId) === Number(item.id)
                 ? { ...ci, quantity: ci.quantity + 1 }
                 : ci
             )
@@ -110,12 +102,10 @@ const MarketCart = () => {
 
   const calculateTotal = () =>
     parseFloat(
-      productsInCart
-        .reduce(
-          (acc, i) => acc + (Number(i.price) || 0) * (Number(i.quantity) || 0),
-          0
-        )
-        .toFixed(2)
+      productsInCart.reduce(
+        (acc, i) => acc + (Number(i.price) || 0) * (Number(i.quantity) || 0),
+        0
+      ).toFixed(2)
     );
 
   const estimatedTotal = (
@@ -145,60 +135,44 @@ const MarketCart = () => {
               </span>{" "}
               items in your cart.
             </h1>
-            {productsInCart.length === 0 || <ClearBtn />}
           </div>
 
           {productsInCart.length > 0 ? (
             <div className="relative">
+              {/* Table headers */}
               <table className="w-full border border-border">
                 <thead className="bg-gray-100 sticky top-0 z-10">
                   <tr>
-                    <th className="border border-border py-2 px-3 text-left w-12">
-                      No
-                    </th>
-                    <th className="border border-border py-2 px-3 text-left">
-                      Items
-                    </th>
-                    <th className="border border-border py-2 px-3 text-center w-40">
-                      Quantity
-                    </th>
-                    <th className="border border-border py-2 px-3 text-right w-32">
-                      Total
-                    </th>
+                    <th className="border py-2 px-3 text-left w-12">No</th>
+                    <th className="border py-2 px-3 text-left">Items</th>
+                    <th className="border py-2 px-3 text-center w-40">Quantity</th>
+                    <th className="border py-2 px-3 text-right w-32">Total</th>
                   </tr>
                 </thead>
               </table>
 
+              {/* Table body */}
               <div className="max-h-[50vh] overflow-y-auto hide-y-scrollbar">
                 <table className="w-full border border-border border-t-0">
                   <tbody>
                     {productsInCart.map((item, index) => (
-                      <tr
-                        key={item.id}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="border border-border p-3 text-center w-12">
-                          {index + 1}
-                        </td>
-                        <td className="border border-border p-3">
+                      <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="border p-3 text-center w-12">{index + 1}</td>
+                        <td className="border p-3">
                           <div className="flex gap-4">
                             <img
-                              src={item.image}
+                              src={productImagePath(item.image)}
                               alt={item.title}
                               className="w-24 h-24 object-cover rounded-lg flex-shrink-0"
                             />
                             <div>
-                              <h2 className="text-xl font-semibold mb-1">
-                                {item.title}
-                              </h2>
-                              <p className="text-gray-600 text-sm mb-2">
-                                {item.description}
-                              </p>
+                              <h2 className="text-xl font-semibold mb-1">{item.title}</h2>
+                              <p className="text-gray-600 text-sm mb-2">{item.description}</p>
                             </div>
                           </div>
                         </td>
 
-                        <td className="border border-border p-3 text-center w-40">
+                        <td className="border p-3 text-center w-40">
                           <div className="flex items-center justify-center gap-3">
                             <button
                               className="bg-gray-200 p-1 rounded hover:bg-gray-300"
@@ -213,7 +187,7 @@ const MarketCart = () => {
                               min="0"
                               value={Number(item?.quantity) || 0}
                               onChange={(e) =>
-                                handleQuantityChange(item.id, e.target.value)
+                                handleQuantityChange(item.productId, e.target.value)
                               }
                               className="w-12 text-center border rounded"
                             />
@@ -228,11 +202,8 @@ const MarketCart = () => {
                           </div>
                         </td>
 
-                        <td className="border border-border p-3 text-right text-lg font-semibold w-32">
-                          $
-                          {(
-                            Number(item.quantity) * Number(item.price) || 0
-                          ).toFixed(2)}
+                        <td className="border p-3 text-right text-lg font-semibold w-32">
+                          ${ (Number(item.quantity) * Number(item.price) || 0).toFixed(2) }
                         </td>
                       </tr>
                     ))}
@@ -243,12 +214,8 @@ const MarketCart = () => {
               <table className="w-full border border-border">
                 <tbody>
                   <tr className="bg-gray-100 font-bold text-lg">
-                    <td colSpan={3} className="p-3 text-center">
-                      Total
-                    </td>
-                    <td className="p-3 text-right w-32 border ">
-                      ${calculateTotal()}
-                    </td>
+                    <td colSpan={3} className="p-3 text-center">Total</td>
+                    <td className="p-3 text-right w-32 border">${calculateTotal()}</td>
                   </tr>
                 </tbody>
               </table>
@@ -268,31 +235,17 @@ const MarketCart = () => {
           <h2 className="text-2xl font-bold mb-4">Summary</h2>
           <table className="w-full">
             <tbody>
-              <tr>
-                <td className="py-1">Products Cost</td>
-                <td className="py-1 text-right">${calculateTotal()}</td>
-              </tr>
-              <tr>
-                <td className="py-1">Shipping Cost</td>
-                <td className="py-1 text-right">${shippingFee}</td>
-              </tr>
-              <tr>
-                <td className="py-1">Discount</td>
-                <td className="py-1 text-right">{discount}%</td>
-              </tr>
-              <tr>
-                <td className="py-1">Tax</td>
-                <td className="py-1 text-right">{tax}%</td>
-              </tr>
+              <tr><td className="py-1">Products Cost</td><td className="py-1 text-right">${calculateTotal()}</td></tr>
+              <tr><td className="py-1">Shipping Cost</td><td className="py-1 text-right">${shippingFee}</td></tr>
+              <tr><td className="py-1">Discount</td><td className="py-1 text-right">{discount}%</td></tr>
+              <tr><td className="py-1">Tax</td><td className="py-1 text-right">{tax}%</td></tr>
               <tr className="border-t font-bold text-lg">
                 <td className="py-2">Estimated Total</td>
                 <td className="py-2 text-right">${estimatedTotal}</td>
               </tr>
             </tbody>
           </table>
-          <div className="flex justify-end">
-            <PayBtn />
-          </div>
+          <div className="flex justify-end"><PayBtn /></div>
         </div>
       </div>
     </section>

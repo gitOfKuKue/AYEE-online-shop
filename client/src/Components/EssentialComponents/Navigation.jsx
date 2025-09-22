@@ -143,10 +143,10 @@ const Navigation = () => {
           ) : (
             <div className="flex gap-3">
               <Link to="/sign-in">
-                <CustomBtn title="Sign In" />
+                <CustomBtn title="Sign In" status="200" />
               </Link>
               <Link to="/sign-up">
-                <CustomBtn title="Sign Up" />
+                <CustomBtn title="Sign Up" status="200" />
               </Link>
             </div>
           )}

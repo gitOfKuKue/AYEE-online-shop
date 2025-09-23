@@ -7,34 +7,42 @@ import useAPICalling from "../Common/useAPICalling";
 import { useNavigate } from "react-router";
 import useCartStore from "../Common/Store/useCartStore";
 import useUser from "../Hook/useUser";
+import { mutate } from "swr";
 
 const MarketCart = () => {
   const navigate = useNavigate();
   const { data } = useUser();
   const user = data?.user;
 
-  const [shippingFee, setShippingFee] = useState(user?.cart?.length ? 10 : 0);
-  const [discount, setDiscount] = useState(user?.cart?.length ? 20 : 0);
-  const [tax] = useState(0);
+  const [shippingFee, setShippingFee] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [tax, setTax] = useState(0);
 
   const [cartItems, setCartItems] = useState([]);
   const { products, setProducts, fetchProducts, baseUrl, productImagePath } =
     useAPICalling();
   const { handleAddCartItem, handleSubtractCartItem } = useCartStore();
 
-  // sync cart items when user changes
   useEffect(() => {
-    if (user?.cart) setCartItems(user.cart);
+    if (user?.cart.length > 0) {
+      setCartItems(user.cart);
+      setDiscount(20);
+      setShippingFee(10);
+      setTax(10);
+    } else {
+      setCartItems([]);
+      setDiscount(0);
+      setShippingFee(0);
+      setTax(0);
+    }
   }, [user]);
 
-  // fetch products
   useEffect(() => {
     let mounted = true;
-    const loadProducts = async () => {
+    (async () => {
       const data = await fetchProducts();
       if (mounted) setProducts(data);
-    };
-    loadProducts();
+    })();
     return () => {
       mounted = false;
     };
@@ -42,7 +50,6 @@ const MarketCart = () => {
 
   const [productsInCart, setProductsInCart] = useState([]);
 
-  // merge products with cartItems
   useEffect(() => {
     if (!products || !cartItems) return;
     const merged = products
@@ -61,17 +68,7 @@ const MarketCart = () => {
   const subtractQuantity = async (product) => {
     try {
       await handleSubtractCartItem(user, product, baseUrl);
-      setCartItems((prev) =>
-        prev
-          .map((ci) =>
-            String(ci.productId) === String(product.id)
-              ? { ...ci, quantity: ci.quantity - 1 }
-              : ci
-          )
-          .filter((ci) => ci.quantity > 0)
-      );
-      setShippingFee(0);
-      setDiscount(0);
+      mutate("local-user");
     } catch (error) {
       console.error(error.message);
     }
@@ -91,18 +88,7 @@ const MarketCart = () => {
   const addQuantity = async (product) => {
     try {
       await handleAddCartItem(user, product, navigate, baseUrl);
-      setCartItems((prev) => {
-        const exists = prev.find(
-          (ci) => String(ci.productId) === String(product.id)
-        );
-        return exists
-          ? prev.map((ci) =>
-              String(ci.productId) === String(product.id)
-                ? { ...ci, quantity: ci.quantity + 1 }
-                : ci
-            )
-          : [...prev, { productId: String(product.id), quantity: 1 }];
-      });
+      mutate("local-user");
     } catch (err) {
       console.error(err);
     }
@@ -121,8 +107,8 @@ const MarketCart = () => {
   const estimatedTotal = (
     calculateTotal() +
     shippingFee +
-    (calculateTotal() * discount) / 100 +
-    (calculateTotal() * tax) / 100
+    (calculateTotal() * tax) / 100 -
+    (calculateTotal() * discount) / 100
   ).toFixed(2);
 
   return (
@@ -149,7 +135,6 @@ const MarketCart = () => {
 
           {productsInCart.length > 0 ? (
             <div className="relative">
-              {/* Table headers */}
               <table className="w-full border border-border">
                 <thead className="bg-gray-100 sticky top-0 z-10">
                   <tr>
@@ -163,7 +148,6 @@ const MarketCart = () => {
                 </thead>
               </table>
 
-              {/* Table body */}
               <div className="max-h-[50vh] overflow-y-auto hide-y-scrollbar">
                 <table className="w-full border border-border border-t-0">
                   <tbody>
@@ -186,7 +170,7 @@ const MarketCart = () => {
                               <h2 className="text-xl font-semibold mb-1">
                                 {item.title}
                               </h2>
-                              <p className="text-gray-600 text-sm mb-2">
+                              <p className="text-gray-600 text-sm mb-2 line-clamp-3">
                                 {item.description}
                               </p>
                             </div>

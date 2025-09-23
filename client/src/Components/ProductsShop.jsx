@@ -50,7 +50,7 @@ const ProductsShop = () => {
       </div>
 
       {/* Products List */}
-      {filteredProducts.length === 0 && (
+      {filteredProducts?.length === 0 && (
         <div className="">
           <img
             src={noSearchFoundPic}
@@ -63,7 +63,7 @@ const ProductsShop = () => {
         </div>
       )}
       <div className="grid grid-cols-5 gap-2">
-        {filteredProducts.map((product) => (
+        {filteredProducts?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

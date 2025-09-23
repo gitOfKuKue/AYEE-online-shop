@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const SwitchBtn = ({ handleChange, product: { valid } }) => {
+const SwitchBtn = ({ handleChange, formData: { valid } }) => {
   return (
     <StyledWrapper>
       <label className="switch">

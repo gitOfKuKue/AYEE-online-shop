@@ -11,4 +11,4 @@ const useGenerateId = (type, name, time, category = "") => {
   }
 };
 
-export default useGenerateId;
+module.exports = useGenerateId;

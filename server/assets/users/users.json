@@ -18,7 +18,12 @@
       "recentOrders": [],
       "membershipTier": "Bronze",
       "preferredCategories": [],
-      "cart": [],
+      "cart": [
+        {
+          "productId": "2285:67-101:67-4",
+          "quantity": 5
+        }
+      ],
       "paymentMethods": [],
       "lastLogin": ""
     },

@@ -3,6 +3,10 @@ const path = require("path");
 
 // Path to the JSON file so we can write changes back
 const usersFile = path.join(__dirname, "../assets/users/users.json");
+const productsFile = path.join(
+  __dirname,
+  "../assets/products/products_list.json"
+);
 
 /**
  * POST /api/users/:id/cart
@@ -10,27 +14,41 @@ const usersFile = path.join(__dirname, "../assets/users/users.json");
  */
 const addCartItem = async (req, res) => {
   const userDatas = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
+  const productDatas = JSON.parse(fs.readFileSync(productsFile, "utf-8"));
   try {
     const userId = parseInt(req.params.id, 10); // user id remains numeric
-    const { productId, quantity } = req.body;   // productId will be a string
+    const { productId, quantity } = req.body; // productId will be a string
 
     if (!productId || typeof quantity !== "number") {
-      return res
-        .status(400)
-        .json({ error: "productId (string) and quantity (number) are required" });
+      return res.status(400).json({
+        error: "productId (string) and quantity (number) are required",
+      });
     }
 
     // Find the user
     const user = userDatas.users.find((u) => u.id === userId);
+    const product = productDatas.products.find((p) => p.id === productId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
+    }
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // ✅ check available stock BEFORE pushing to cart
+    if (product.quantity < quantity) {
+      return res.status(400).json({
+        error: `Out of stock! Only ${product.quantity} left.`,
+      });
     }
 
     // Push the new item into the user's cart
     user.cart.push({ productId: String(productId), quantity });
+    product.quantity -= quantity;
 
     // Persist changes back to the JSON file
     fs.writeFileSync(usersFile, JSON.stringify(userDatas, null, 2));
+    fs.writeFileSync(productsFile, JSON.stringify(productDatas, null, 2));
 
     return res.status(201).json({
       message: "Items added successfully!",
@@ -49,6 +67,7 @@ const addCartItem = async (req, res) => {
 const adjustQuantity = async (req, res) => {
   try {
     const userDatas = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
+    const productDatas = JSON.parse(fs.readFileSync(productsFile, "utf-8"));
     const userId = parseInt(req.params.id, 10);
     const { productId, action } = req.body; // action: "increment" | "decrement"
 
@@ -63,8 +82,12 @@ const adjustQuantity = async (req, res) => {
 
     // ---- Find user ----
     const user = userDatas.users.find((u) => u.id === userId);
+    const product = productDatas.products.find((p) => p.id === productId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
 
     // ---- Find product in cart (compare as string) ----
@@ -77,9 +100,16 @@ const adjustQuantity = async (req, res) => {
 
     // ---- Adjust quantity ----
     if (action === "increment") {
+      if (product.quantity <= 0) {
+        return res
+          .status(400)
+          .json({ message: "Out of stock! No more items available." });
+      }
       cartItem.quantity += 1;
+      product.quantity -= 1;
     } else if (action === "decrement") {
       cartItem.quantity -= 1;
+      product.quantity += 1;
       // remove item completely if quantity <= 0
       if (cartItem.quantity <= 0) {
         user.cart = user.cart.filter(
@@ -90,6 +120,7 @@ const adjustQuantity = async (req, res) => {
 
     // ---- Save back to JSON file ----
     fs.writeFileSync(usersFile, JSON.stringify(userDatas, null, 2));
+    fs.writeFileSync(productsFile, JSON.stringify(productDatas, null, 2));
 
     return res.status(200).json({
       message: "Cart updated successfully",

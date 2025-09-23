@@ -2,22 +2,22 @@
   "products": [
     {
       "id": "9863:65-101:70-5",
-      "title": "Apple",
-      "price": 3,
+      "title": "Fuji Apple",
+      "price": 5,
       "quantity": 300,
       "category": "Fruit",
       "description": "Enjoy the natural sweetness and refreshing crunch of our premium fresh apples. Perfect for a healthy snack, these apples are handpicked for their vibrant color, juicy texture, and rich flavor. Ideal for eating raw, adding to salads, baking pies, or blending into smoothies. Packed with essential vitamins, fiber, and antioxidants to keep you energized and nourished throughout the day.",
-      "image": "1758531779858.jpeg",
+      "image": "1758611244905.jpg",
       "rating": 0,
       "sold": 0,
-      "valid": false,
+      "valid": true,
       "time": "Mon Sep 22 2025 15:32:59 GMT+0630 (Myanmar Time)"
     },
     {
       "id": "2285:67-101:67-4",
       "title": "Cream Cake",
       "price": 12,
-      "quantity": 5,
+      "quantity": 0,
       "category": "Cake",
       "description": "Delight in the rich taste and fluffy texture of our freshly baked cake. Perfectly moist and layered with smooth, creamy frosting, every bite offers a melt-in-your-mouth experience. Ideal for birthdays, celebrations, or simply indulging your sweet tooth.",
       "image": "1758532022280.jpeg",
@@ -51,6 +51,45 @@
       "sold": 0,
       "valid": true,
       "time": "Mon Sep 22 2025 15:43:12 GMT+0630 (Myanmar Time)"
+    },
+    {
+      "id": "7115:77-111:70-5",
+      "title": "Mango",
+      "price": 3,
+      "quantity": 30,
+      "category": "Fruit",
+      "description": "Sweet, Juicy & Handpicked for You\r\nExperience the natural goodness of our farm-fresh mangoes. Each fruit is carefully selected at peak ripeness to ensure a perfect balance of sweetness and aroma.",
+      "image": "1758611597104.jpeg",
+      "rating": 0,
+      "sold": 0,
+      "valid": true,
+      "time": "Tue Sep 23 2025 13:43:17 GMT+0630 (Myanmar Time)"
+    },
+    {
+      "id": "9993:74-114:72-14",
+      "title": "Jägermeister",
+      "price": 20,
+      "quantity": 200,
+      "category": "Herbal Liqueur",
+      "description": "A Legendary Blend of 56 Botanicals\r\nDiscover the unmistakable taste of Jägermeister, the world-famous German herbal liqueur. Crafted from a secret recipe of 56 herbs, roots, and spices, it delivers a smooth yet complex flavor—perfect for any celebration.",
+      "image": "1758611719987.jpg",
+      "rating": 0,
+      "sold": 0,
+      "valid": true,
+      "time": "Tue Sep 23 2025 13:45:19 GMT+0630 (Myanmar Time)"
+    },
+    {
+      "id": "9865:77-109:82-3",
+      "title": "Mandalay Rum",
+      "price": 40,
+      "quantity": 51,
+      "category": "Rum",
+      "description": "A Taste of Myanmar’s Heritage\r\nMandalay Rum is a proud Burmese classic, distilled and aged to capture the rich, warm flavors of Myanmar’s traditional craftsmanship. Its smooth character and deep amber color make it a timeless favorite for rum lovers.",
+      "image": "1758611879862.jpg",
+      "rating": 0,
+      "sold": 0,
+      "valid": true,
+      "time": "Tue Sep 23 2025 13:47:59 GMT+0630 (Myanmar Time)"
     }
   ]
 }

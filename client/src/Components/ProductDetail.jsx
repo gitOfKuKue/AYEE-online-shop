@@ -159,9 +159,18 @@ const ProductDetails = () => {
           {/* ---------- Right: Product Info ---------- */}
           <div className="flex flex-col">
             <div className="flex items-start justify-between mb-4">
-              <h1 className="text-3xl font-bold text-gray-800 leading-snug">
-                {product.title}
-              </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-gray-800 leading-snug">
+                  {product.title}
+                </h1>
+                {isOutOfStock && (
+                  <div className="border border-red-600 rounded-[var(--standard-radius)] px-2 py-1">
+                    <h1 className="text-red-500 text-xl font-bold">
+                      Out of stock
+                    </h1>
+                  </div>
+                )}
+              </div>
               <span className="ml-4 px-3 py-1 text-sm rounded-full bg-amber-100 text-amber-800 capitalize">
                 {product.category}
               </span>
@@ -385,10 +394,16 @@ const ProductDetails = () => {
               </div>
 
               {/* valid */}
-              <div className="flex items-center gap-2">
-                <label htmlFor="invalid">Out of stock</label>
-                <SwitchBtn handleChange={handleChange} product={product} />
-                <label htmlFor="valid">Instock</label>
+              <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3 mt-4">
+                <span className="text-sm font-medium text-gray-700">
+                  Product Stock Status
+                </span>
+
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-gray-600">Out of stock</span>
+                  <SwitchBtn handleChange={handleChange} formData={formData} />
+                  <span className="text-sm text-gray-600">In stock</span>
+                </div>
               </div>
             </div>
           </div>

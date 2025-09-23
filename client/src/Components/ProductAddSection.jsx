@@ -72,7 +72,7 @@ const ProductAddSection = () => {
         category: "",
         price: "",
       });
-      await fetchProduct();
+      await fetchProducts();
     } else {
       handleAlert(data.message || "Failed to add product!", 400);
     }

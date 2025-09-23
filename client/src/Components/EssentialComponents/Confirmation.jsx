@@ -34,21 +34,53 @@ const Confirmation = () => {
   };
 
   return (
-    <div className="fixed bg-[var(--gray--)] top-1/2 left-1/2 w-100 shadow-xl rounded-[var(--standard-radius)] -translate-1/2">
-      <h1 className="text-center text-xl my-5">{confirmMessage}</h1>
-      <div className="grid grid-cols-2 w-full items-center">
-        <button
-          className="w-full py-2 rounded-bl-[var(--standard-radius)] cursor-pointer text-font1 mx-auto hover:bg-gray-400 hover:text-green-400"
-          onClick={handleYes}
-        >
-          Yes
-        </button>
-        <button
-          className="w-full py-2 rounded-br-[var(--standard-radius)]  cursor-pointer text-font1 mx-auto   hover:bg-gray-400 hover:text-red-400"
-          onClick={handleNo}
-        >
-          No
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      {/* Modal container */}
+      <div className="bg-white w-[90%] max-w-md rounded-xl shadow-2xl overflow-hidden animate-fadeIn">
+        {/* Header */}
+        <div className="px-8 pt-8 pb-4 text-center">
+          {/* Optional icon */}
+          <div className="mx-auto mb-4 w-14 h-14 flex items-center justify-center rounded-full bg-red-100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-8 h-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3m0 4h.01M4.93 4.93l14.14 14.14M12 2a10 10 0 100 20 10 10 0 000-20z"
+              />
+            </svg>
+          </div>
+
+          {/* Message */}
+          <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+            {confirmMessage}
+          </h1>
+          <p className="text-gray-600">
+            This action cannot be undone. Are you sure?
+          </p>
+        </div>
+
+        {/* Action buttons */}
+        <div className="border-t border-gray-200 flex flex-col sm:flex-row">
+          <button
+            onClick={handleNo}
+            className="w-full sm:w-1/2 py-4 text-gray-700 font-medium hover:bg-gray-100 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleYes}
+            className="w-full sm:w-1/2 py-4 text-white font-medium bg-red-500 hover:bg-red-600 transition-colors"
+          >
+            Yes, proceed
+          </button>
+        </div>
       </div>
     </div>
   );

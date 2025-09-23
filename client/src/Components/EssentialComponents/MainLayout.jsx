@@ -11,19 +11,14 @@ const MainLayout = () => {
 
   // ✅ Put the routes you want to hide each component on in arrays
   const navigationHiddenRoutes = ["/sign-up", "/sign-in"];
-  const footerHiddenRoutes = [
-    "/sign-up",
-    "/sign-in",
-    "/cart",
-    "/shop",
-    "/profile",
-  ];
+  const footerHiddenRoutes = ["/sign-up", "/sign-in", "/cart", "/shop"];
 
   // ✅ Check if current route is in those arrays
   const hideNavigation = navigationHiddenRoutes.includes(pathname);
   const hideFooter =
     footerHiddenRoutes.includes(pathname) ||
-    pathname.startsWith("/product-detail");
+    pathname.startsWith("/product-detail") ||
+    pathname.startsWith("/profile");
 
   const { isConfirmation } = useConfirmationStore();
 

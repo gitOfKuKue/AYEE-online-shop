@@ -19,6 +19,19 @@ const useAPICalling = create((set, get) => ({
       console.log(error.message);
     }
   },
+  users: [],
+  setUsers: (user) => set({ users: user }),
+  fetchUsers: async () => {
+    try {
+      const { baseUrl } = get();
+      const usersResponse = await fetch(`${baseUrl}/api/users`);
+      const fetchedUsers = await usersResponse.json();
+      set({ users: fetchedUsers });
+      return fetchedUsers;
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
 }));
 
 export default useAPICalling;

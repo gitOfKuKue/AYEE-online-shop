@@ -3,8 +3,6 @@ import { mutate } from "swr";
 import useAlertStore from "./useAlertStore";
 
 const useCartStore = create((set, get) => ({
-  searchQuery: "",
-  setSearchQuery: (value) => set({ searchQuery: value }),
 
   handleAddCartItem: async (user, product, navigate, baseUrl) => {
     const { handleAlert } = useAlertStore.getState();
@@ -41,7 +39,10 @@ const useCartStore = create((set, get) => ({
 
         // ✅ handle “out of stock” or other server errors
         if (!res.ok) {
-          handleAlert(data.message || "Unable to add item. Possibly out of stock.", 404);
+          handleAlert(
+            data.message || "Unable to add item. Possibly out of stock.",
+            404
+          );
           return;
         }
 
@@ -59,16 +60,23 @@ const useCartStore = create((set, get) => ({
 
         handleAlert(data.message ?? "Item added to cart", 200);
       } else {
-        const res = await fetch(`${baseUrl}/api/users/${user.id}/cart/quantity`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productId, action: "increment" }),
-        });
+        const res = await fetch(
+          `${baseUrl}/api/users/${user.id}/cart/quantity`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, action: "increment" }),
+          }
+        );
         const data = await res.json();
 
         // ✅ handle “out of stock” or other server errors
         if (!res.ok) {
-          handleAlert(data.message || "Unable to increase quantity. Possibly out of stock.", 404);
+          handleAlert(
+            data.message ||
+              "Unable to increase quantity. Possibly out of stock.",
+            404
+          );
           return;
         }
 

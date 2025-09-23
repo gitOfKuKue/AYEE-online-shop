@@ -4,12 +4,12 @@ import ProductCard from "./ProductCard";
 import noSearchFoundPic from "../assets/images/no-search-found.svg";
 import useAPICalling from "../Common/useAPICalling";
 import useCategory from "../Common/useCategory";
-import useCartStore from "../Common/Store/useCartStore";
+import useCommon from "../Common/Store/useCommon";
 
 const ProductsShop = () => {
   const { categoryMenus } = useCategory();
   const { products, setProducts, fetchProducts } = useAPICalling();
-  const { searchQuery } = useCartStore();
+  const { searchQuery } = useCommon();
 
 
   useEffect(() => {

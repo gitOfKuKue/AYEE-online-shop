@@ -6,14 +6,19 @@ import {
   faStore,
   faCog,
   faSignOutAlt,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import UserProfile from "../Components/ProfileComponents/UserProfile";
 import LogOutBtn from "../Components/buttons/LogOutBtn";
 import { Link } from "react-router-dom";
+import UsersInfos from "../Components/ProfileComponents/UsersInfos";
+import useUser from "../Hook/useUser";
 
 const ProfilePage = () => {
+  const { data } = useUser();
+  const user = data?.user;
   const [menus, setMenus] = useState([
     {
       id: 1,
@@ -38,9 +43,9 @@ const ProfilePage = () => {
     },
     {
       id: 4,
-      title: "Settings",
-      icon: faCog,
-      link: "/settings",
+      title: "Users",
+      icon: faUsers,
+      link: "/profile/users",
       isCurrent: false,
     },
     {
@@ -70,6 +75,17 @@ const ProfilePage = () => {
               <div key={menu.id} className="mt-auto py-3 px-5">
                 <LogOutBtn />
               </div>
+            ) : menu.title === "Users" ? (
+              <Link to={menu.link}
+                key={menu.id}
+                className={`w-50 py-3 px-5 flex items-center gap-2 rounded-r-md cursor-pointer ${
+                  menu.isCurrent && "bg-iconic text-font1"
+                } ${user?.role === "admin" ? "block" : "hidden"}`}
+                onClick={() => handleMenuClick(menu.id)}
+              >
+                <FontAwesomeIcon icon={menu.icon} className="text-xl" />
+                <h1 className="text-xl">{menu.title}</h1>
+              </Link>
             ) : (
               <Link
                 to={menu.link}
@@ -88,7 +104,9 @@ const ProfilePage = () => {
       </aside>
 
       <section className="ml-[250px] p-5">
-        <UserProfile />
+        {/* {menus[0].isCurrent && <UserProfile />}
+        {menus[3].isCurrent && <UsersInfos />} */}
+        <Outlet />
       </section>
     </section>
   );

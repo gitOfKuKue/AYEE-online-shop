@@ -17,9 +17,9 @@ import {
 import SignInUpBtn from "../buttons/SingInUpBtn";
 import DropDownBtn from "../buttons/DropDownBtn";
 import useUser from "../../Hook/useUser";
-import useCartStore from "../../Common/Store/useCartStore";
 import useAuthStore from "../../Common/Store/useAuthStore";
 import CustomBtn from "../buttons/CustomBtn";
+import useCommon from "../../Common/Store/useCommon";
 
 const Navigation = () => {
   const profilePath = "/src/assets/profiles/";
@@ -45,7 +45,7 @@ const Navigation = () => {
     },
   ]);
 
-  const { setSearchQuery } = useCartStore();
+  const { setSearchQuery } = useCommon();
   const { isLoggedIn } = useAuthStore();
 
   const { data } = useUser();
@@ -92,7 +92,7 @@ const Navigation = () => {
 
         {/* Search Bar / Auth / Cart */}
         <div className="flex items-center gap-5">
-          {location.pathname === "/shop" && (
+          {(location.pathname === "/shop" || location.pathname === ("/profile/users")) && (
             // {/* Search Bar */}
             <div className="relative flex items-center py-2 w-[30rem]">
               <FontAwesomeIcon

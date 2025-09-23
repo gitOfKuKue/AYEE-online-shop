@@ -5,6 +5,7 @@
   --light-green--: #8eb486;
   --gray--: #DCDCDC;
   --light-gray--: #faf7f3;
+  --gray-200--: #e5e7eb;
   --milk-gray--: #fdfaf6;
   --mud-white--: #fefbf6;
   --pure-white--: #ffffff;
@@ -18,7 +19,7 @@
   --color-iconic: var(--light-green--);
   --color-background: var(--milk-gray--);
   --color-card-bg: var(--milk-white--);
-  --color-border: var(--dry-black--);
+  --color-border: var(--gray-200--);
   --color-font1: var(--mud-white--);
   --color-font2: var(--midnight-black--);
   --color-font2-light: var(--light-black--);

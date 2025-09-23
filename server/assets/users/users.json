@@ -182,6 +182,28 @@
       "cart": [],
       "paymentMethods": [],
       "lastLogin": ""
+    },
+    {
+      "id": 6,
+      "firstName": "Julian",
+      "lastName": "Admin",
+      "email": "julian.admin@gmail.com",
+      "phone": "02942424914",
+      "password": "$2b$10$nhG3jFEVMH7lKGLsj8wfD.iB3AmOu5Qb0VwcxH4ArcYvJTcGoZhPi",
+      "role": "user",
+      "createdAt": "2025-09-23T10:04:42.152Z",
+      "profileImage": null,
+      "shippingAddress": "Aung Chan Thar St",
+      "billingAddress": "",
+      "preferredPaymentMethod": "",
+      "loyaltyPoints": 0,
+      "wishlist": [],
+      "recentOrders": [],
+      "membershipTier": "Bronze",
+      "preferredCategories": [],
+      "cart": [],
+      "paymentMethods": [],
+      "lastLogin": ""
     }
   ]
 }

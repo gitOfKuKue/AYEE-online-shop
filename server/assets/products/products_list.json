@@ -6,11 +6,11 @@
       "price": 3,
       "quantity": 300,
       "category": "Fruit",
-      "description": "Enjoy the natural sweetness and refreshing crunch of our premium fresh apples. Perfect for a healthy snack, these apples are handpicked for their vibrant color, juicy texture, and rich flavor. Ideal for eating raw, adding to salads, baking pies, or blending into smoothies. Packed with essential vitamins, fiber, and antioxidants to keep you energized and nourished throughout the day.\r\n\r\n✅ Weight: ~150–200 g per piece\r\n✅ Storage: Keep refrigerated to maintain freshness\r\n✅ Best for: Snacks, desserts, and healthy recipes",
+      "description": "Enjoy the natural sweetness and refreshing crunch of our premium fresh apples. Perfect for a healthy snack, these apples are handpicked for their vibrant color, juicy texture, and rich flavor. Ideal for eating raw, adding to salads, baking pies, or blending into smoothies. Packed with essential vitamins, fiber, and antioxidants to keep you energized and nourished throughout the day.",
       "image": "1758531779858.jpeg",
       "rating": 0,
       "sold": 0,
-      "valid": true,
+      "valid": false,
       "time": "Mon Sep 22 2025 15:32:59 GMT+0630 (Myanmar Time)"
     },
     {

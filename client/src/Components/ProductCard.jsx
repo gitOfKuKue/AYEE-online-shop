@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/components/ProductCard.jsx
+import React, { useEffect, useState } from "react";
 import BuyNowBtn from "./buttons/BuyNowBtn";
 import Button3 from "./buttons/ViewMoreBtn";
 import useAPICalling from "../Common/useAPICalling";
@@ -6,20 +7,36 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const maxStars = 5;
-  const { productImagePath} = useAPICalling();
+  const { productImagePath } = useAPICalling();
+  const [isOutOfStock, setIsOutOfStock] = useState(false);
+
+  useEffect(() => {
+    // Out of stock if quantity is 0 OR product is marked invalid
+    setIsOutOfStock(product?.quantity <= 0 || product?.valid === false);
+  }, [product]);
 
   return (
-    <div className="w-full h-[480px] flex flex-col border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white">
-      {/* Image */}
-      <div className="w-full h-1/2 overflow-hidden">
+    <div
+      className={`w-full h-[480px] flex flex-col border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white`}
+    >
+      {/* ---------- Product Image ---------- */}
+      <div className="w-full h-1/2 overflow-hidden relative">
         <img
           src={productImagePath(product.image)}
           alt={product.title}
-          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+          className={`w-full h-full object-cover transform hover:scale-105 transition-transform duration-300 ${
+            isOutOfStock && "blur-[2px]"
+          }`}
         />
+        {/* ---------- Out-of-stock Banner ---------- */}
+        {isOutOfStock && (
+          <div className="absolute right-1 bottom-1 border border-red-600 rounded-[var(--standard-radius)] px-2 py-1">
+            <h1 className="text-red-500 text-xl font-bold">Out of stock</h1>
+          </div>
+        )}
       </div>
 
-      {/* Content */}
+      {/* ---------- Product Content ---------- */}
       <div className="p-5 flex flex-col flex-1">
         {/* Title */}
         <h1 className="text-gray-900 font-bold text-lg truncate">
@@ -64,7 +81,9 @@ const ProductCard = ({ product }) => {
 
         {/* Buttons */}
         <div className="flex items-center mt-auto">
-          <BuyNowBtn price={product.price} product={product} />
+          {!isOutOfStock && (
+            <BuyNowBtn price={product.price} product={product} />
+          )}
           <Link to={`/product-detail/${product.id}`}>
             <Button3 title="View More" />
           </Link>

@@ -1,4 +1,3 @@
-// src/pages/ProductDetails.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import useAPICalling from "../Common/useAPICalling";
@@ -9,6 +8,7 @@ import CustomBtn from "./buttons/CustomBtn";
 import ChangeFileBtn from "./buttons/ChangeFileBtn";
 import useAlertStore from "../Common/Store/useAlertStore";
 import useUser from "../Hook/useUser";
+import SwitchBtn from "./buttons/SwitchBtn";
 
 const ProductDetails = () => {
   const fileInputRef = useRef(null);
@@ -17,14 +17,21 @@ const ProductDetails = () => {
   const user = data?.user;
 
   const { id } = useParams();
-  console.log(id);
   const maxStars = 5;
 
-  const { products, fetchProducts, baseUrl, productImagePath } = useAPICalling();
+  const { products, fetchProducts, baseUrl, productImagePath } =
+    useAPICalling();
   const [isEdit, setIsEdit] = useState(false);
   const { handleAlert } = useAlertStore();
 
   const product = products?.find((p) => p.id === id);
+
+  const [isOutOfStock, setIsOutOfStock] = useState(false);
+
+  useEffect(() => {
+    // Out of stock if quantity is 0 OR product is marked invalid
+    setIsOutOfStock(product?.quantity <= 0 || product?.valid === false);
+  }, [product]);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -33,6 +40,7 @@ const ProductDetails = () => {
     imageFile: null,
     category: "",
     price: "",
+    valid: true,
   });
 
   useEffect(() => {
@@ -49,6 +57,8 @@ const ProductDetails = () => {
         imageFile: null, // we only set if user selects new file
         category: product.category || "",
         price: product.price || "",
+        // ✅ FIXED: preserve false
+        valid: product.valid ?? true,
       });
     }
   }, [product]);
@@ -74,7 +84,9 @@ const ProductDetails = () => {
   // handle text and file inputs
   const handleChange = (e) => {
     const { name, type, value, files } = e.target;
-    if (type === "file" && files.length > 0) {
+    if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, valid: e.target.checked }));
+    } else if (type === "file" && files.length > 0) {
       const file = files[0];
       setFormData((prev) => ({
         ...prev,
@@ -96,6 +108,7 @@ const ProductDetails = () => {
     fd.append("quantity", formData.quantity);
     fd.append("category", formData.category);
     fd.append("description", formData.description);
+    fd.append("valid", formData.valid);
     if (formData.imageFile) fd.append("image", formData.imageFile); // send the file
     const res = await fetch(`${baseUrl}/api/products/${product?.id}`, {
       method: "PUT",
@@ -113,6 +126,7 @@ const ProductDetails = () => {
         imageFile: null,
         category: "",
         price: "",
+        valid: true,
       });
     } else {
       handleAlert(data.message || "Failed to update product!", 404);
@@ -189,11 +203,13 @@ const ProductDetails = () => {
             )}
 
             {/* Buy Button */}
-            <div className="mt-auto pt-6 border-t border-gray-200">
-              <BuyNowBtn price={product.price} product={product} />
-            </div>
+            {!isOutOfStock && (
+              <div className="mt-auto pt-6 border-t border-gray-200">
+                <BuyNowBtn price={product.price} product={product} />
+              </div>
+            )}
 
-            <div className="flex justify-between items-center mt-6 ">
+            <div className="flex justify-between items-center mt-auto ">
               {/* Back link */}
               <Link
                 to="/shop"
@@ -367,13 +383,20 @@ const ProductDetails = () => {
                   onChange={handleChange}
                 ></textarea>
               </div>
+
+              {/* valid */}
+              <div className="flex items-center gap-2">
+                <label htmlFor="invalid">Out of stock</label>
+                <SwitchBtn handleChange={handleChange} product={product} />
+                <label htmlFor="valid">Instock</label>
+              </div>
             </div>
           </div>
 
           {/* ✅ Submit Button */}
           <div className="mt-8 flex justify-end gap-2">
             <CustomBtn
-              title="Add"
+              title="Save"
               status={200}
               type="submit"
               className="px-6 py-3"

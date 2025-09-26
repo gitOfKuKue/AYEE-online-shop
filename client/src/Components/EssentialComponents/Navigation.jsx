@@ -20,10 +20,9 @@ import useUser from "../../Hook/useUser";
 import useAuthStore from "../../Common/Store/useAuthStore";
 import CustomBtn from "../buttons/CustomBtn";
 import useCommon from "../../Common/Store/useCommon";
+import useAPICalling from "../../Common/useAPICalling";
 
 const Navigation = () => {
-  const profilePath = "/src/assets/profiles/";
-
   const location = useLocation(); // current path
   const [menus, setMenus] = useState([
     { id: 1, menu: "Home", icon: faHome, link: "/", isCurrent: false },
@@ -47,6 +46,7 @@ const Navigation = () => {
 
   const { setSearchQuery } = useCommon();
   const { isLoggedIn } = useAuthStore();
+  const { userProfilePath, fetchUsers } = useAPICalling();
 
   const { data } = useUser();
   const user = data?.user;
@@ -92,7 +92,8 @@ const Navigation = () => {
 
         {/* Search Bar / Auth / Cart */}
         <div className="flex items-center gap-5">
-          {(location.pathname === "/shop" || location.pathname === ("/profile/users")) && (
+          {(location.pathname === "/shop" ||
+            location.pathname === "/profile/users") && (
             // {/* Search Bar */}
             <div className="relative flex items-center py-2 w-[30rem]">
               <FontAwesomeIcon
@@ -119,9 +120,7 @@ const Navigation = () => {
   "
               >
                 <img
-                  src={`${profilePath}${
-                    user?.profileImage || "defaultProfilePic.png"
-                  }`}
+                  src={userProfilePath(user?.profileImage)}
                   alt={`${user?.firstName || "User"} - profile picture`}
                   className="w-full h-full object-cover"
                 />

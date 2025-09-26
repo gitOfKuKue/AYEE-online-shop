@@ -171,7 +171,7 @@ const createUser = async (req, res) => {
         password: hashedPassword,
         role: "user",
         createdAt: now,
-        profileImage: null,
+        profileImage: "defaultProfilePic.png",
         shippingAddress: userData.address,
         billingAddress: "",
         preferredPaymentMethod: "",
@@ -199,4 +199,46 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getUserById, logIn, sendingOtp, createUser };
+// Update the user profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const usersData = loadUsers();
+    const updatedInfos = req.body; // text fields
+    const profileImageFile = req.file; // uploaded file
+    const { id } = req.params;
+
+    // ✅ find the user by id (convert both to string for safety)
+    const user = usersData.users.find((u) => String(u.id) === String(id));
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // ✅ update text fields
+    Object.assign(user, updatedInfos);
+
+    // ✅ update profile image if a file is uploaded
+    if (profileImageFile) {
+      user.profileImage = profileImageFile.filename;
+    }
+
+    // ✅ write updated data back to JSON file
+    saveUser(usersData);
+
+
+    res.status(200).json({
+      message: "Profile updated",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getUsers,
+  getUserById,
+  logIn,
+  sendingOtp,
+  createUser,
+  updateUserProfile,
+};

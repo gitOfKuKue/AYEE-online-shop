@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Check, Edit, WandSparkles } from "lucide-react";
 import { useParams } from "react-router-dom";
 
@@ -14,30 +14,37 @@ import useUser from "../../Hook/useUser";
 import useCartStore from "../../Common/Store/useCartStore";
 import formatDate from "../../Common/Utils/formatDate";
 import useAPICalling from "../../Common/useAPICalling";
+import EditProfileForm from "./EditProfileForm";
+import useAlertStore from "../../Common/Store/useAlertStore";
+import { mutate } from "swr";
 
 const UserProfile = ({ className }) => {
+  const profileImage = useRef(null);
   const { id } = useParams();
   const { data } = useUser(); // ✅ hook at top level
-  const { fetchUsers, fetchProducts } = useAPICalling();
+  const { fetchUsers, fetchProducts, userProfilePath, baseUrl } =
+    useAPICalling();
   const { handleAddCartItem } = useCartStore();
+  const { handleAlert } = useAlertStore();
 
   const [user, setUser] = useState(null); // ✅ single user object
   const [products, setProducts] = useState([]);
   const [wishList, setWishList] = useState([]);
   const [recentOrders, setRecentOrders] = useState([]);
+  const [profilePic, setProfilePic] = useState(null);
 
   // --- Load correct user ---
   useEffect(() => {
-    if (!id) {
-      setUser(data?.user ?? null);
-    } else {
-      (async () => {
-        const users = await fetchUsers();
-        const found = users?.find((u) => u.id === Number(id));
-        setUser(found ?? null);
-      })();
-    }
-  }, [id, data, fetchUsers]);
+    if (!data?.user?.id) return;
+
+    const loadUsers = async () => {
+      const users = await fetchUsers();
+      const user = users.find((u) => String(u.id) === String(data.user.id));
+      setUser(user);
+    };
+
+    loadUsers();
+  }, [fetchUsers, data?.user?.id]);
 
   // --- Sync wishlist / recentOrders whenever user changes ---
   useEffect(() => {
@@ -47,19 +54,15 @@ const UserProfile = ({ className }) => {
 
   // --- Load products for wishlist & recent orders ---
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await fetchProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
+    const loadProducts = async () => {
+      const data = await fetchProducts();
+      setProducts(data);
+    };
+    loadProducts();
   }, [fetchProducts]);
 
   if (!user) return <p>No user logged in</p>;
 
-  const profilePath = "/src/assets/profiles/";
   const maxStars = 5;
   const tierIcons = { bronze, silver, gold, platinum };
 
@@ -68,9 +71,42 @@ const UserProfile = ({ className }) => {
     recentOrders.includes(p.id)
   );
 
+  const handleProfileChange = async (e) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("profileImage", file);
+
+      const res = await fetch(`${baseUrl}/api/users/${user.id}`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      const data = await res.json();
+      handleAlert(data.message || "Profile updated", 200);
+
+      // Update profile picture preview
+      setProfilePic(file);
+
+      // Update local user state / cache
+      const updatedUser = data.user; // must match backend response
+      localStorage.setItem("user", JSON.stringify({ user: updatedUser }));
+      mutate(
+        "local-user",
+        { user: updatedUser, token: localStorage.getItem("token") },
+        false
+      );
+    } catch (error) {
+      handleAlert(error.message, 500);
+      console.error(error);
+    }
+  };
+
   return (
     <section className={`${className} py-8`}>
-      <div className="max-h-[calc(100vh-5em)] space-y-6">
+      <div className={`max-h-[calc(100vh-5em)] space-y-6 `}>
         <h1 className="text-3xl font-bold mb-6">
           {user?.firstName + " " + user?.lastName}'s Profile
         </h1>
@@ -78,25 +114,46 @@ const UserProfile = ({ className }) => {
         {/* Two columns layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* ---- Left Column ---- */}
-          <div className="shadow-lg bg-white p-6 rounded-2xl border border-border">
-            <div className="border-b border-border pb-5 mb-5 text-center">
+          <div className="shadow-lg bg-white p-6 rounded-2xl border border-gray-200">
+            <div className="border-b border-gray-200 pb-5 mb-5 text-center">
               <div className="flex justify-between items-center mb-5">
                 <p className="font-light text-gray-500">
                   Joined: {user?.createdAt ? formatDate(user.createdAt) : ""}
                 </p>
-                <button className="flex gap-1 items-center text-primary hover:underline">
-                  <Edit size={15} />
-                  <span className="text-md">Edit</span>
-                </button>
               </div>
 
-              <div className="w-40 h-40 mx-auto rounded-full overflow-hidden border border-border mb-4">
-                <img
-                  src={`${profilePath}${
-                    user?.profileImage || "defaultProfilePic.png"
-                  }`}
-                  alt={`${user?.firstName || "User"} - profile pic`}
-                  className="w-full h-full object-cover"
+              <div>
+                <div className="relative w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-gray-200 shadow-md group">
+                  {/* Profile Image */}
+                  <img
+                    src={
+                      profilePic
+                        ? URL.createObjectURL(profilePic)
+                        : userProfilePath(user.profileImage)
+                    }
+                    alt={`${user?.firstName || "User"} - profile pic`}
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Dark hover overlay */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                    <button
+                      onClick={() => profileImage.current?.click()}
+                      className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-full shadow hover:bg-white transition"
+                    >
+                      <Edit size={16} className="text-blue-600" />
+                      <span className="font-medium">Edit</span>
+                    </button>
+                  </div>
+                </div>
+
+                <input
+                  name="profileImage"
+                  type="file"
+                  accept=".jpg, .jpeg, .png, .heic"
+                  ref={profileImage}
+                  hidden
+                  onChange={handleProfileChange}
                 />
               </div>
 
@@ -130,7 +187,7 @@ const UserProfile = ({ className }) => {
           {/* ---- Right Column ---- */}
           <div className="flex flex-col gap-6">
             {/* Level Card */}
-            <div className="shadow-lg bg-white rounded-2xl p-6 border border-border">
+            <div className="shadow-lg bg-white rounded-2xl p-6 border border-gray-200">
               <div className="flex justify-center items-center gap-2 mb-6">
                 <Check size={30} />
                 <h1 className="text-2xl font-bold">Level</h1>
@@ -159,7 +216,7 @@ const UserProfile = ({ className }) => {
             </div>
 
             {/* Wish List Card */}
-            <div className="shadow-lg bg-white rounded-2xl p-6 flex-1 border border-border">
+            <div className="shadow-lg bg-white rounded-2xl p-6 flex-1 border border-gray-200">
               <div className="flex justify-center items-center gap-2 mb-6">
                 <WandSparkles size={30} />
                 <h1 className="text-2xl font-bold">Wish List</h1>
@@ -182,7 +239,7 @@ const UserProfile = ({ className }) => {
                 {productsWishList.map((product) => (
                   <div
                     key={product.id}
-                    className="flex items-center gap-4 rounded-xl shadow-md border border-border p-4 bg-gray-50 transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
+                    className="flex items-center gap-4 rounded-xl shadow-md border border-gray-200 p-4 bg-gray-50 transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
                   >
                     <div className="w-24 h-30 flex-shrink-0">
                       <img
@@ -220,16 +277,16 @@ const UserProfile = ({ className }) => {
           <h1 className="text-2xl font-bold mb-4">Recent Orders</h1>
 
           {productsRecentOrders.length === 0 ? (
-            <div className="text-center bg-white rounded-2xl shadow-lg p-5 border border-border">
+            <div className="text-center bg-white rounded-2xl shadow-lg p-5 border border-gray-200">
               <img src={orderNow} alt="No Orders" className="w-30 mx-auto" />
               <p className="text-gray-500 mt-2">No recent orders.</p>
             </div>
           ) : (
-            <div className="shadow-lg bg-white rounded-2xl p-6 flex-1 space-y-4 border border-border">
+            <div className="shadow-lg bg-white rounded-2xl p-6 flex-1 space-y-4 border border-gray-200">
               {productsRecentOrders.map((product) => (
                 <div
                   key={product.id}
-                  className="w-full bg-white rounded-xl shadow-md flex flex-col sm:flex-row overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-border"
+                  className="w-full bg-white rounded-xl shadow-md flex flex-col sm:flex-row overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-200"
                 >
                   <div className="sm:w-1/4 w-full sm:h-52 overflow-hidden flex-shrink-0">
                     <img

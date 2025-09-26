@@ -3,7 +3,11 @@ import { create } from "zustand";
 const useAPICalling = create((set, get) => ({
   productImagePath: (image) => {
     const { baseUrl } = get();
-    return `${baseUrl}/uploads/${image}`;
+    return `${baseUrl}/uploads/products/${image}`;
+  },
+  userProfilePath: (image) => {
+    const { baseUrl } = get();
+    return `${baseUrl}/uploads/users/${image}`;
   },
   baseUrl: "http://localhost:8000",
   products: [],

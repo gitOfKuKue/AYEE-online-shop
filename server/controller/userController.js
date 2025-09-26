@@ -4,19 +4,60 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
+const nodemailer = require("nodemailer");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 // Importing users data
 const data = require("../assets/users/users.json");
 const userFile = path.join(__dirname, "../assets/users/users.json");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
+
+// Generate OTP
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
+
+const otpStore = {};
+
+const loadUsers = () => JSON.parse(fs.readFileSync(userFile, "utf-8"));
+const saveUser = (userDatas) =>
+  fs.writeFileSync(userFile, JSON.stringify(userDatas, null, 2));
+
+// Sending OTP to user
+const sendOTPMail = async (toEmail, otp) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"AYEE – Online Shop" <${process.env.EMAIL}>`,
+    to: toEmail,
+    subject: "Your OTP Code for Sign Up",
+    text: `Your OTP is ${otp}.`,
+    html: `
+      <div style="font-family: Arial; padding: 20px; background: #f4f4f4;">
+        <h2>Welcome to AYEE – Online Shop</h2>
+        <p>Your OTP code is:</p>
+        <div style="font-size: 24px; font-weight: bold; background: #4CAF50; color: #fff; padding: 10px 20px; display: inline-block; border-radius: 6px;">
+          ${otp}
+        </div>
+        <p>This code is valid for 5 minutes.</p>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 
 // Getting all users
 const getUsers = async (req, res) => {
   try {
+    const data = loadUsers();
     res.status(200).json(data.users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -27,7 +68,7 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-
+    const data = loadUsers();
     const user = data.users.find((u) => u.id === parseInt(id));
     res.status(200).json(user);
   } catch (error) {
@@ -38,6 +79,7 @@ const getUserById = async (req, res) => {
 // Loggin in
 const logIn = async (req, res) => {
   try {
+    const data = loadUsers();
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -67,12 +109,35 @@ const logIn = async (req, res) => {
   }
 };
 
+// Sending OTP
+const sendingOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const userDatas = loadUsers();
+    if (!email) res.status(404).json({ message: "Email required!" });
+
+    // Checking email is already registered or not
+    const isRegistered = userDatas.users.find((user) => user.email === email);
+
+    if (isRegistered) {
+      return res.status(404).json({ message: "Email has already registered!" });
+    }
+
+    const otp = generateOTP();
+    otpStore[email] = otp;
+    await sendOTPMail(email, otp);
+    res.status(200).json({ message: "OTP has sent to your email!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Create user Data
 const createUser = async (req, res) => {
   // For Encryption
   const saltRounds = 10;
 
-  const userDatas = JSON.parse(fs.readFileSync(userFile, "utf-8"));
+  const userDatas = loadUsers();
 
   try {
     const userData = req.body;
@@ -92,53 +157,46 @@ const createUser = async (req, res) => {
       return res.status(400).json({ message: "Please fill the form!" });
     }
 
-    // Checking email is already registered or not
-    const isRegistered = userDatas.users.find(
-      (user) => user.email === userData.email
-    );
+    if (otpStore[userData.email] === Number(userData.otp)) {
+      const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
 
-    if (isRegistered) {
-      return res.status(400).json({ message: "Email is already registered!" });
+      const now = new Date();
+
+      const loggedInUser = {
+        id: data.users.length + 1,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        phone: userData.phoneNo,
+        password: hashedPassword,
+        role: "user",
+        createdAt: now,
+        profileImage: null,
+        shippingAddress: userData.address,
+        billingAddress: "",
+        preferredPaymentMethod: "",
+        loyaltyPoints: 0,
+        wishlist: [],
+        recentOrders: [],
+        membershipTier: "Bronze",
+        preferredCategories: [],
+        cart: [],
+        paymentMethods: [],
+        lastLogin: "",
+      };
+
+      userDatas.users.push(loggedInUser);
+      saveUser(userDatas);
+      delete otpStore[userData.email];
+      res
+        .status(201)
+        .json({ message: "User created successfully!", user: loggedInUser });
+    } else {
+      res.status(404).json({ message: "OTP doesn't match!" });
     }
-
-    const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
-
-    const now = new Date();
-
-    const loggedInUser = {
-      id: data.users.length + 1,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      phone: userData.phoneNo,
-      password: hashedPassword,
-      role: "user",
-      createdAt: now,
-      profileImage: null,
-      shippingAddress: userData.address,
-      billingAddress: "",
-      preferredPaymentMethod: "",
-      loyaltyPoints: 0,
-      wishlist: [],
-      recentOrders: [],
-      membershipTier: "Bronze",
-      preferredCategories: [],
-      cart: [],
-      paymentMethods: [],
-      lastLogin: "",
-    };
-
-    userDatas.users.push(loggedInUser);
-
-    // Writing data into json file
-    fs.writeFileSync(userFile, JSON.stringify(userDatas, null, 2));
-
-    res
-      .status(201)
-      .json({ message: "User created successfully!", user: loggedInUser });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { getUsers, getUserById, logIn, createUser };
+module.exports = { getUsers, getUserById, logIn, sendingOtp, createUser };

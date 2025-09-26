@@ -21,7 +21,7 @@
       "cart": [
         {
           "productId": "2285:67-101:67-4",
-          "quantity": 5
+          "quantity": 4
         }
       ],
       "paymentMethods": [],
@@ -185,18 +185,18 @@
     },
     {
       "id": 6,
-      "firstName": "Julian",
-      "lastName": "Admin",
-      "email": "julian.admin@gmail.com",
-      "phone": "02942424914",
-      "password": "$2b$10$nhG3jFEVMH7lKGLsj8wfD.iB3AmOu5Qb0VwcxH4ArcYvJTcGoZhPi",
-      "role": "user",
-      "createdAt": "2025-09-23T10:04:42.152Z",
+      "firstName": "Ku",
+      "lastName": "Kue",
+      "email": "kukue014@gmail.com",
+      "phone": "09796000227",
+      "password": "$2b$10$F6qcvE6JsGdnoohdEf2UeOBBfSHNNIMVbqW4EeO09M1qjySzMH.1.",
+      "role": "admin",
+      "createdAt": "2025-09-26T05:28:41.195Z",
       "profileImage": null,
-      "shippingAddress": "Aung Chan Thar St",
+      "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",
       "preferredPaymentMethod": "",
-      "loyaltyPoints": 0,
+      "loyaltyPoints": 500,
       "wishlist": [],
       "recentOrders": [],
       "membershipTier": "Bronze",

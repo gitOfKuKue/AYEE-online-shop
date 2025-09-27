@@ -3,7 +3,18 @@ import Container from "./EssentialComponents/Container";
 import useAPICalling from "../Common/useAPICalling";
 
 const InfoDetailSection = () => {
-  const { products } = useAPICalling();
+  const { products, fetchProducts, users, fetchUsers } = useAPICalling();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      await fetchProducts();
+    };
+    loadProducts();
+    const loadUsers = async () => {
+      await fetchUsers();
+    };
+    loadUsers();
+  }, [fetchProducts, fetchUsers]);
 
   //   Counts
   const productCounts = products.length;
@@ -14,6 +25,7 @@ const InfoDetailSection = () => {
     return acc;
   }, {});
   const categoryCounts = Object.keys(categories).length;
+  const userCounts = users.length;
 
   return (
     <section className="mt-5 mb-10">
@@ -29,19 +41,19 @@ const InfoDetailSection = () => {
               <h1 className="text-iconic text-6xl font-bold">
                 {productCounts}+
               </h1>
-              <p className="text-font2 text-xl">products</p>
+              <p className="text-font2 text-xl">Products</p>
             </div>
             <div className="py-1 px-5 border-l-4 border-border">
               <h1 className="text-iconic text-6xl font-bold">
                 {categoryCounts}+
               </h1>
-              <p className="text-font2 text-xl">product categories</p>
+              <p className="text-font2 text-xl">Product categories</p>
             </div>
             <div className="py-1 px-5 border-l-4 border-border">
               <h1 className="text-iconic text-6xl font-bold">
-                {products.length}+
+                {userCounts}+
               </h1>
-              <p className="text-font2 text-xl">products</p>
+              <p className="text-font2 text-xl">Users</p>
             </div>
             <div className="py-1 px-5 border-l-4 border-border">
               <h1 className="text-iconic text-6xl font-bold">

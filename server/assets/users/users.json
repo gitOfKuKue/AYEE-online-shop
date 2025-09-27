@@ -185,8 +185,8 @@
     },
     {
       "id": 6,
-      "firstName": "Kue",
-      "lastName": "Kue",
+      "firstName": "Thu Htet ",
+      "lastName": "Naing",
       "email": "kukue014@gmail.com",
       "phone": "0898247910",
       "password": "$2b$10$F6qcvE6JsGdnoohdEf2UeOBBfSHNNIMVbqW4EeO09M1qjySzMH.1.",
@@ -208,22 +208,14 @@
         },
         {
           "productId": "6026:73-109:73-9",
-          "quantity": 2
-        },
-        {
-          "productId": "9993:74-114:72-14",
-          "quantity": 2
+          "quantity": 3
         },
         {
           "productId": "9865:77-109:82-3",
-          "quantity": 1
+          "quantity": 3
         },
         {
-          "productId": "7115:77-111:70-5",
-          "quantity": 2
-        },
-        {
-          "productId": "2767:66-100:66-5",
+          "productId": "9993:74-114:72-14",
           "quantity": 1
         }
       ],

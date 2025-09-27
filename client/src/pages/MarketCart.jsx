@@ -26,7 +26,7 @@ const MarketCart = () => {
   useEffect(() => {
     if (user?.cart.length > 0) {
       setCartItems(user.cart);
-      setDiscount(20);
+      setDiscount(5);
       setShippingFee(10);
       setTax(10);
     } else {

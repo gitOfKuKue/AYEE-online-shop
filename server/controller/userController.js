@@ -213,6 +213,28 @@ const updateUserProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
+    if (updatedInfos.currentPwd) {
+      const isMatch = await bcrypt.compare(
+        updatedInfos.currentPwd,
+        user.password
+      );
+
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ message: "Password is wrong!", status: "currentPassword" });
+      }
+    }
+
+    // For Encryption
+    const saltRounds = 10;
+
+    // Hashing
+    updatedInfos.password = await bcrypt.hash(
+      updatedInfos.password,
+      saltRounds
+    );
+
     // ✅ update text fields
     Object.assign(user, updatedInfos);
 

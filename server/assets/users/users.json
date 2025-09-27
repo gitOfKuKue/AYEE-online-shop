@@ -137,7 +137,7 @@
       "lastName": "Naing",
       "email": "kukue014@gmail.com",
       "phone": "09796000227",
-      "password": "$2b$10$HWJsyKm4sbotLHxvlK7tnunUJ1TQS62WlspE4os6RC/dlJc/3FVcG",
+      "password": "$2b$10$/cF2Ynl8gXhxQyr7I9qG1.C3vn7Zdrl1g2TZTDPLujIgF3pzaesue",
       "role": "user",
       "createdAt": "2025-09-27T08:33:34.476Z",
       "profileImage": "1758962126783.png",
@@ -151,7 +151,10 @@
       "preferredCategories": [],
       "cart": [],
       "paymentMethods": [],
-      "lastLogin": ""
+      "lastLogin": "",
+      "currentPwd": "kukue@014#",
+      "newPwd": "thuHtetnaing@014#",
+      "repeatPwd": "thuHtetnaing@014#"
     }
   ]
 }

@@ -255,7 +255,7 @@ const deleteUser = async (req, res) => {
     );
 
     // Save updated users
-    await saveUser(updatedUsers);
+    await saveUser({ users: updatedUsers });
 
     res
       .status(200)

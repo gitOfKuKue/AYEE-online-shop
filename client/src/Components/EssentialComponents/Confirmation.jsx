@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import yes_no from "../../assets/images/yes_no.svg";
 import { useNavigate } from "react-router";
 import useConfirmationStore from "../../Common/Store/useConfirmationStore";
 import useAuthStore from "../../Common/Store/useAuthStore";
+import useUser from "../../Hook/useUser";
+import useAPICalling from "../../Common/useAPICalling";
 
 const Confirmation = () => {
+  const { data } = useUser();
+  const { fetchUsers, baseUrl } = useAPICalling();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (!data?.user?.id) return;
+
+    const loadUsers = async () => {
+      const users = await fetchUsers();
+      const user = users.find(
+        (u) => String(u.id) === String(data.user.id)
+      );
+      setUser(user);
+    };
+
+    loadUsers();
+  }, [fetchUsers, data?.user?.id]);
+
   const navigate = useNavigate();
   const {
     isConfirmation,
@@ -14,7 +34,7 @@ const Confirmation = () => {
     confirmMessage,
     confirmStatus,
   } = useConfirmationStore();
-  const { performLogOut } = useAuthStore();
+  const { performLogOut, deleteUser } = useAuthStore();
 
   // Hide / Show
   if (!isConfirmation || !confirmStatus) return null;
@@ -24,6 +44,9 @@ const Confirmation = () => {
     setIsConfirmation(false);
 
     if (confirmStatus === "logout") {
+      performLogOut(navigate);
+    } else if (confirmStatus === "deleteUser") {
+      deleteUser(user, baseUrl);
       performLogOut(navigate);
     }
   };

@@ -71,58 +71,6 @@
       "lastLogin": "2025-10-12T08:30:00Z"
     },
     {
-      "id": 3,
-      "firstName": "Clara",
-      "lastName": "Smith",
-      "email": "clara.smith@example.com",
-      "phone": "+1-202-555-4888",
-      "password": "$2b$10$x4qS.KHQOoxDYYDHtrpql.YEpyMTSeBL6ctQScFHUiEKHQguYbUua",
-      "role": "user",
-      "createdAt": "2025-10-09T15:45:00Z",
-      "profileImage": "https://i.pravatar.cc/150?img=46",
-      "shippingAddress": "350 Fifth Avenue, New York, NY 10118",
-      "billingAddress": "350 Fifth Avenue, New York, NY 10118",
-      "preferredPaymentMethod": "Credit Card",
-      "loyaltyPoints": 65,
-      "wishlist": [
-        8,
-        9
-      ],
-      "recentOrders": [
-        {
-          "productId": 14,
-          "quantity": 1
-        },
-        {
-          "productId": 15,
-          "quantity": 1
-        }
-      ],
-      "membershipTier": "Silver",
-      "preferredCategories": [
-        "Tech",
-        "Books"
-      ],
-      "cart": [
-        {
-          "productId": 16,
-          "quantity": 1
-        },
-        {
-          "productId": 18,
-          "quantity": 1
-        }
-      ],
-      "paymentMethods": [
-        {
-          "type": "Credit Card",
-          "last4": "7788",
-          "expiry": "07/29"
-        }
-      ],
-      "lastLogin": "2025-10-12T10:15:00Z"
-    },
-    {
       "id": 4,
       "firstName": "Justin",
       "lastName": "Oden",
@@ -188,37 +136,20 @@
       "firstName": "Thu Htet ",
       "lastName": "Naing",
       "email": "kukue014@gmail.com",
-      "phone": "0898247910",
-      "password": "$2b$10$F6qcvE6JsGdnoohdEf2UeOBBfSHNNIMVbqW4EeO09M1qjySzMH.1.",
-      "role": "admin",
-      "createdAt": "2025-09-26T05:28:41.195Z",
-      "profileImage": "1758898124109.jpg",
+      "phone": "09796000227",
+      "password": "$2b$10$HWJsyKm4sbotLHxvlK7tnunUJ1TQS62WlspE4os6RC/dlJc/3FVcG",
+      "role": "user",
+      "createdAt": "2025-09-27T08:33:34.476Z",
+      "profileImage": "1758962126783.png",
       "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",
       "preferredPaymentMethod": "",
-      "loyaltyPoints": 500,
+      "loyaltyPoints": 0,
       "wishlist": [],
       "recentOrders": [],
-      "membershipTier": "Platinum",
+      "membershipTier": "Bronze",
       "preferredCategories": [],
-      "cart": [
-        {
-          "productId": "9863:65-101:70-5",
-          "quantity": 3
-        },
-        {
-          "productId": "6026:73-109:73-9",
-          "quantity": 3
-        },
-        {
-          "productId": "9865:77-109:82-3",
-          "quantity": 3
-        },
-        {
-          "productId": "9993:74-114:72-14",
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "paymentMethods": [],
       "lastLogin": ""
     }

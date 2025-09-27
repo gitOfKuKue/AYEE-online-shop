@@ -224,11 +224,42 @@ const updateUserProfile = async (req, res) => {
     // ✅ write updated data back to JSON file
     saveUser(usersData);
 
-
     res.status(200).json({
       message: "Profile updated",
       user,
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Make sure loadUsers is awaited if it returns a Promise
+    const usersData = await loadUsers();
+
+    // Find the user to delete
+    const deletedUser = usersData.users.find(
+      (u) => String(u.id) === String(id)
+    );
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // Filter out the deleted user
+    const updatedUsers = usersData.users.filter(
+      (u) => String(u.id) !== String(id)
+    );
+
+    // Save updated users
+    await saveUser(updatedUsers);
+
+    res
+      .status(200)
+      .json({ message: "User deleted successfully!", user: deletedUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -241,4 +272,5 @@ module.exports = {
   sendingOtp,
   createUser,
   updateUserProfile,
+  deleteUser,
 };

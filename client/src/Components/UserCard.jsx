@@ -1,15 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import useAPICalling from "../Common/useAPICalling";
 
 const UserCard = ({ user }) => {
-  const profilePath = "/src/assets/profiles/";
+  const { userProfilePath } = useAPICalling();
 
   return (
-    <Link to={`./${user?.id}`} className="p-6 border border-gray-200 rounded-2xl shadow-lg flex flex-col md:flex-row items-start md:items-center gap-6 bg-[var(--pure-white)] hover:shadow-xl transition-shadow duration-300">
+    <Link
+      to={`./${user?.id}`}
+      className="p-6 border border-gray-200 rounded-2xl shadow-lg flex flex-col md:flex-row items-start md:items-center gap-6 bg-[var(--pure-white)] hover:shadow-xl transition-shadow duration-300"
+    >
       {/* Profile Image */}
       <div className="w-28 h-28 overflow-hidden rounded-full flex-shrink-0 border-2 border-gray-300">
         <img
-          src={`${profilePath}${user?.profileImage || "defaultProfilePic.png"}`}
+          src={userProfilePath(user?.profileImage)}
           alt={`${user?.firstName || "User"} - profile pic`}
           className="w-full h-full object-cover"
         />

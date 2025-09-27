@@ -9,10 +9,11 @@ const {
   sendingOtp,
   createUser,
   updateUserProfile,
+  deleteUser,
 } = require("../controller/userController");
 const multer = require("multer");
 
-const uploadDir = path.join(__dirname, "..","uploads", "users");
+const uploadDir = path.join(__dirname, "..", "uploads", "users");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
@@ -36,5 +37,6 @@ router.post("/login", logIn);
 router.post("/sign-up/sendingOtp", sendingOtp);
 router.post("/users", createUser);
 router.patch("/users/:id", upload.single("profileImage"), updateUserProfile);
+router.delete("/users/:id", deleteUser);
 
 module.exports = router;

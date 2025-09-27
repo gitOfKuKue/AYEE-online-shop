@@ -3,6 +3,7 @@
 @theme {
   /* Colors */
   --light-green--: #8eb486;
+  --dark-green--: #6E9167;
   --gray--: #DCDCDC;
   --light-gray--: #faf7f3;
   --gray-200--: #e5e7eb;
@@ -17,6 +18,7 @@
 
   /* Defined name */
   --color-iconic: var(--light-green--);
+  --color-iconic-dark: var(--dark-green--);
   --color-background: var(--milk-gray--);
   --color-card-bg: var(--milk-white--);
   --color-border: var(--dry-black--);

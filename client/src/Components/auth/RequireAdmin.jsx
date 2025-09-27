@@ -1,21 +1,47 @@
 // src/components/Auth/RequireAdmin.jsx
 import { Navigate } from "react-router-dom";
-import useUser from "../../Hook/useUser"; // or your auth hook/context
+import { useEffect, useState } from "react";
+import useUser from "../../Hook/useUser";
+import useAPICalling from "../../Common/useAPICalling";
 
 export default function RequireAdmin({ children }) {
-  const { data } = useUser();         // data?.user?.role is assumed
+  const { data } = useUser();            // might be undefined at first
+  const { fetchUsers } = useAPICalling();
 
-  if (!data?.user) {
-    // Not logged in → redirect to sign-in page
-    return <Navigate to="/sign-in" replace />;
-  }
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (data.user.role !== "admin") {
-    // Logged in but not admin → show error or redirect
-    return <Navigate to="/" replace />;
-    // or: return <ErrorPage message="Unauthorized" />;
-  }
+  useEffect(() => {
+    // wait until we actually know the logged-in user id
+    if (!data?.user?.id) return;         
 
-  // ✅ User is admin → show the protected content
+    const loadUsers = async () => {
+      try {
+        const usersData = await fetchUsers();
+        const foundUser = usersData.find(
+          u => String(u.id) === String(data.user.id)
+        );
+        setUser(foundUser || null);
+      } catch (err) {
+        console.error("Failed to load users:", err);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
+  }, [fetchUsers, data?.user?.id]);
+
+  // 🔹 Wait for the effect to finish
+  if (loading) return <p>Checking permissions…</p>;
+
+  // 🔹 If no user was found, redirect to sign-in
+  if (!user) return <Navigate to="/sign-in" replace />;
+
+  // 🔹 If user exists but isn’t admin, block access
+  if (user.role !== "admin") return <Navigate to="/" replace />;
+
+  // ✅ Only now render protected content
   return children;
 }

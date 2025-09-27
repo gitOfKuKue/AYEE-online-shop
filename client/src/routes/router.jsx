@@ -17,6 +17,9 @@ import UsersInfos from "../Components/ProfileComponents/UsersInfos";
 
 import "../index.css";
 import RequireAdmin from "../Components/auth/RequireAdmin";
+import Setting from "../Components/ProfileComponents/Setting";
+import AccountSetting from "../Components/ProfileComponents/setting/AccountSetting";
+import SecuritySetting from "../Components/ProfileComponents/setting/SecuritySetting";
 
 const isMaintenance = false;
 
@@ -31,29 +34,26 @@ const router = createBrowserRouter(
     : [
         {
           path: "/",
-          errorElement: <ErrorPage />,
           element: <MainLayout />,
+          errorElement: <ErrorPage />,
           children: [
-            { path: "/sign-in", element: <LoginPage /> },
-            { path: "/sign-up", element: <SignupPage /> },
-            { path: "/", element: <MainPage /> },
-            { path: "/about", element: <AboutPage /> },
-            { path: "/contact", element: <ContactPage /> },
-            { path: "/cart", element: <MarketCart /> },
-            { path: "/shop", element: <Shop /> },
-            { path: "/product-detail/:id", element: <ProductDetails /> },
+            { path: "sign-in", element: <LoginPage /> },
+            { path: "sign-up", element: <SignupPage /> },
+            { path: "", element: <MainPage /> },
+            { path: "about", element: <AboutPage /> },
+            { path: "contact", element: <ContactPage /> },
+            { path: "cart", element: <MarketCart /> },
+            { path: "shop", element: <Shop /> },
+            { path: "product-detail/:id", element: <ProductDetails /> },
 
+            // Profile Routes
             {
-              path: "/profile",
+              path: "profile",
               element: <ProfilePage />,
               children: [
+                { path: "", element: <UserProfile /> }, // default profile
                 {
-                  path: "/profile",
-                  element: <UserProfile />,
-                },
-                {
-                  // ✅ Protect admin-only route
-                  path: "/profile/users",
+                  path: "users",
                   element: (
                     <RequireAdmin>
                       <UsersInfos />
@@ -61,13 +61,20 @@ const router = createBrowserRouter(
                   ),
                 },
                 {
-                  // ✅ Also protect individual user profile under admin section
-                  path: "/profile/users/:id",
+                  path: "users/:id",
                   element: (
                     <RequireAdmin>
                       <UserProfile />
                     </RequireAdmin>
                   ),
+                },
+                {
+                  path: "setting",
+                  element: <Setting />,
+                  children: [
+                    { path: "account", element: <AccountSetting /> },
+                    { path: "security", element: <SecuritySetting /> },
+                  ],
                 },
               ],
             },

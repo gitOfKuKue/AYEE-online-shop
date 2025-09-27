@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Check, Edit, WandSparkles } from "lucide-react";
+import { Check, ChevronsUp, Edit, WandSparkles } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 import bronze from "../../assets/icons/bronze.png";
@@ -14,7 +14,6 @@ import useUser from "../../Hook/useUser";
 import useCartStore from "../../Common/Store/useCartStore";
 import formatDate from "../../Common/Utils/formatDate";
 import useAPICalling from "../../Common/useAPICalling";
-import EditProfileForm from "./EditProfileForm";
 import useAlertStore from "../../Common/Store/useAlertStore";
 import { mutate } from "swr";
 
@@ -39,7 +38,9 @@ const UserProfile = ({ className }) => {
 
     const loadUsers = async () => {
       const users = await fetchUsers();
-      const user = users.find((u) => String(u.id) === String(data.user.id));
+      const user = users.find(
+        (u) => String(u.id) === String(id ? id : data.user.id)
+      );
       setUser(user);
     };
 
@@ -135,16 +136,17 @@ const UserProfile = ({ className }) => {
                     className="w-full h-full object-cover"
                   />
 
-                  {/* Dark hover overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                    <button
-                      onClick={() => profileImage.current?.click()}
-                      className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-full shadow hover:bg-white transition"
-                    >
-                      <Edit size={16} className="text-blue-600" />
-                      <span className="font-medium">Edit</span>
-                    </button>
-                  </div>
+                  {data?.user?.id === user.id && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <button
+                        onClick={() => profileImage.current?.click()}
+                        className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-full shadow hover:bg-white transition"
+                      >
+                        <Edit size={16} className="text-blue-600" />
+                        <span className="font-medium">Edit</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <input
@@ -189,7 +191,7 @@ const UserProfile = ({ className }) => {
             {/* Level Card */}
             <div className="shadow-lg bg-white rounded-2xl p-6 border border-gray-200">
               <div className="flex justify-center items-center gap-2 mb-6">
-                <Check size={30} />
+                <ChevronsUp size={30} />
                 <h1 className="text-2xl font-bold">Level</h1>
               </div>
               <div className="grid grid-cols-2 gap-6 items-center">

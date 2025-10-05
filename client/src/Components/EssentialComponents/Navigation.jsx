@@ -49,7 +49,7 @@ const Navigation = () => {
   const { userProfilePath, fetchUsers } = useAPICalling();
 
   const { data } = useUser();
-  const user = data?.user;
+  const user = data?.user;    
 
   // Update active menu on route change
   useEffect(() => {

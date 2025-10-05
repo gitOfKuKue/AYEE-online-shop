@@ -188,7 +188,7 @@ const createUser = async (req, res) => {
       const now = new Date();
 
       const loggedInUser = {
-        id: data.users.length + 1,
+        id: Date.now(),
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,

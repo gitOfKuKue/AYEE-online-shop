@@ -11,11 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import LogOutBtn from "../Components/buttons/LogOutBtn";
 import useUser from "../Hook/useUser";
+import useAPICalling from "../Common/useAPICalling";
 
 const ProfilePage = () => {
   const location = useLocation();
   const { data } = useUser();
-  const user = data?.user;
+  const [user, setUser] = useState();
+  const { fetchUsers } = useAPICalling();
 
   const [menus, setMenus] = useState([
     { id: 1, title: "Profile", icon: faUser, link: "/profile" },
@@ -26,11 +28,27 @@ const ProfilePage = () => {
     { id: 6, title: "Logout", icon: faSignOutAlt },
   ]);
 
+  // --- Load correct user ---
+  useEffect(() => {
+    if (!data?.user?.id) return;
+
+    const loadUsers = async () => {
+      const users = await fetchUsers();
+      const user = users.find((u) => String(u.id) === String(data.user.id));
+      setUser(user);
+    };
+
+    loadUsers();
+  }, [fetchUsers, data?.user?.id]);
+
   useEffect(() => {
     setMenus((items) =>
       items.map((item) =>
         item.title === "Setting"
-          ? { ...item, isCurrent: location.pathname.startsWith("/profile/setting") }
+          ? {
+              ...item,
+              isCurrent: location.pathname.startsWith("/profile/setting"),
+            }
           : {
               ...item,
               isCurrent: item.link && location.pathname === item.link, // exact match to avoid substring issues

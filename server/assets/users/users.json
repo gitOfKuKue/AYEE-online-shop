@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": 1759629662591,
       "firstName": "Ku",
       "lastName": "Kue",
       "email": "kukue123@gmail.com",
@@ -28,7 +28,7 @@
       "lastLogin": "2025-10-05T01:45:20.299Z"
     },
     {
-      "id": 2,
+      "id": 1752629662491,
       "firstName": "Bob",
       "lastName": "Willion",
       "email": "bob.willion@example.com",
@@ -71,7 +71,7 @@
       "lastLogin": "2025-10-05T01:53:40.485Z"
     },
     {
-      "id": 3,
+      "id": 1759629762491,
       "firstName": "Justin",
       "lastName": "Oden",
       "email": "justin.oden@gmail.com",
@@ -110,7 +110,7 @@
       "lastLogin": ""
     },
     {
-      "id": 4,
+      "id": 1759949662491,
       "firstName": "Robert ",
       "lastName": "Adin",
       "email": "robert.adin@gmail.com",
@@ -132,7 +132,7 @@
       "lastLogin": ""
     },
     {
-      "id": 5,
+      "id": 1759647662491,
       "firstName": "Thu Htet ",
       "lastName": "Naing",
       "email": "thuhtetnaing.14.11@gmail.com",
@@ -140,6 +140,28 @@
       "password": "$2b$10$lm8iMWmx5ik2UTorDbbYaeGZYHf8WfiHXNO1tAUzZwFYopSo2.ZMS",
       "role": "user",
       "createdAt": "2025-10-05T01:54:41.364Z",
+      "profileImage": "defaultProfilePic.png",
+      "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
+      "billingAddress": "",
+      "preferredPaymentMethod": "",
+      "loyaltyPoints": 0,
+      "wishlist": [],
+      "recentOrders": [],
+      "membershipTier": "Bronze",
+      "preferredCategories": [],
+      "cart": [],
+      "paymentMethods": [],
+      "lastLogin": "2025-10-05T02:00:15.491Z"
+    },
+    {
+      "id": 1759631034508,
+      "firstName": "Ku ",
+      "lastName": "Kue",
+      "email": "kukue014@gmail.com",
+      "phone": "09796000227",
+      "password": "$2b$10$17hs5lARXXDxaRoybz/Em.YNYIFlo4rv4UXn.1FlFYG7p8fKtC9VG",
+      "role": "user",
+      "createdAt": "2025-10-05T02:23:54.508Z",
       "profileImage": "defaultProfilePic.png",
       "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",

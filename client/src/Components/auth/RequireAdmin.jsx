@@ -5,7 +5,7 @@ import useUser from "../../Hook/useUser";
 import useAPICalling from "../../Common/useAPICalling";
 
 export default function RequireAdmin({ children }) {
-  const { data } = useUser();            // might be undefined at first
+  const { data } = useUser(); // might be undefined at first
   const { fetchUsers } = useAPICalling();
 
   const [user, setUser] = useState(null);
@@ -13,13 +13,13 @@ export default function RequireAdmin({ children }) {
 
   useEffect(() => {
     // wait until we actually know the logged-in user id
-    if (!data?.user?.id) return;         
+    if (!data?.user?.id) return;
 
     const loadUsers = async () => {
       try {
         const usersData = await fetchUsers();
         const foundUser = usersData.find(
-          u => String(u.id) === String(data.user.id)
+          (u) => String(u.id) === String(data.user.id)
         );
         setUser(foundUser || null);
       } catch (err) {
@@ -32,6 +32,9 @@ export default function RequireAdmin({ children }) {
 
     loadUsers();
   }, [fetchUsers, data?.user?.id]);
+
+  console.log(user);
+
 
   // 🔹 Wait for the effect to finish
   if (loading) return <p>Checking permissions…</p>;

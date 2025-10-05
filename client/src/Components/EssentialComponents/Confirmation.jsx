@@ -44,8 +44,8 @@ const Confirmation = () => {
     if (confirmStatus === "logout") {
       performLogOut(user, baseUrl, navigate);
     } else if (confirmStatus === "deleteUser") {
-      deleteUser(user, baseUrl);
       performLogOut(user, baseUrl, navigate);
+      deleteUser(user, baseUrl);
     }
   };
 

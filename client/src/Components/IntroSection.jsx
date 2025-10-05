@@ -61,13 +61,13 @@ const IntroSection = () => {
 
           {/* Picture */}
           <div>
-            <img src={coverPic} alt="Cover Picture" className="w-150" />
+            <img src={coverPic} alt="Cover Picture" className="lg:w-100 xl:w-150" />
           </div>
         </div>
 
         <HashLink
           to="#discount-section"
-          className="absolute bottom-20 left-1/2 border border-border rounded-full animate-bounce"
+          className="absolute lg:bottom-10 xl:bottom-20 left-1/2 border border-border rounded-full animate-bounce"
         >
           <FontAwesomeIcon icon={faAngleDown} className="text-4xl" />
         </HashLink>

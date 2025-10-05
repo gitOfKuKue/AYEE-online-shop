@@ -32,7 +32,7 @@ const ProductCardsSection = () => {
               <Button1 title="See More" />
             </Link>
           </div>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid md:grid-cols-3 xl:grid-cols-5 gap-2">
             {products.slice(0, 10).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

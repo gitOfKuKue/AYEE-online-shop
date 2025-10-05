@@ -16,6 +16,7 @@ import formatDate from "../../Common/Utils/formatDate";
 import useAPICalling from "../../Common/useAPICalling";
 import useAlertStore from "../../Common/Store/useAlertStore";
 import { mutate } from "swr";
+import useCommon from "../../Common/Store/useCommon";
 
 const UserProfile = ({ className }) => {
   const profileImage = useRef(null);
@@ -25,6 +26,7 @@ const UserProfile = ({ className }) => {
     useAPICalling();
   const { handleAddCartItem } = useCartStore();
   const { handleAlert } = useAlertStore();
+  const { timeAgo } = useCommon();
 
   const [user, setUser] = useState(null); // ✅ single user object
   const [products, setProducts] = useState([]);
@@ -121,6 +123,20 @@ const UserProfile = ({ className }) => {
                 <p className="font-light text-gray-500">
                   Joined: {user?.createdAt ? formatDate(user.createdAt) : ""}
                 </p>
+
+                <div className="flex items-center gap-2">
+                  <h1>Active: </h1>
+                  {user.lastLogin === "active" ? (
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                      <h1>{timeAgo(user.lastLogin)}</h1>
+                    </div>
+                  ) : (
+                    <div>
+                      <h1>{timeAgo(user.lastLogin)}</h1>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>

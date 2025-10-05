@@ -6,6 +6,7 @@ const {
   getUsers,
   getUserById,
   logIn,
+  logout,
   sendingOtp,
   createUser,
   updateUserProfile,
@@ -34,6 +35,7 @@ const router = express.Router();
 router.get("/users", getUsers);
 router.get("/users/:id", getUserById);
 router.post("/login", logIn);
+router.post("/logout", logout);
 router.post("/sign-up/sendingOtp", sendingOtp);
 router.post("/users", createUser);
 router.patch("/users/:id", upload.single("profileImage"), updateUserProfile);

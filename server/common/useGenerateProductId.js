@@ -1,4 +1,4 @@
-const useGenerateId = (type, name, time, category = "") => {
+const useGenerateProductId = (type, name, time, category = "") => {
   const timeCode = Date.now(time).toString().slice(-4);
   const nameCode = name.charCodeAt(0) + "-" + name.charCodeAt(name.length - 1);
 
@@ -11,4 +11,4 @@ const useGenerateId = (type, name, time, category = "") => {
   }
 };
 
-module.exports = useGenerateId;
+module.exports = useGenerateProductId;

@@ -62,7 +62,7 @@ const ProductsShop = () => {
           </h1>
         </div>
       )}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid md:grid-cols-3 2xl:grid-cols-5 gap-2">
         {filteredProducts?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

@@ -1,11 +1,11 @@
 // controllers/products.js
 const fs = require("fs");
 const path = require("path");
+const useGenerateProductId = require("../common/useGenerateProductId");
 
 // 🔧 Use a plain utility, not a React hook.
 // Make sure ../common/useGenerateId.js exports a plain function like:
 //   module.exports = function useGenerateId(prefix, title, time, category) { ... }
-const useGenerateId = require("../common/useGenerateId");
 
 // ✅ Correct relative path to the JSON file
 const productFile = path.join(
@@ -47,7 +47,7 @@ const createProduct = (req, res) => {
     const { title, price, quantity, category, description, time } = req.body;
     const imageName = req.file ? req.file.filename : null; // only store filename
 
-    const id = useGenerateId("product", title, time, category);
+    const id = useGenerateProductId("product", title, time, category);
 
     const newProduct = {
       id,

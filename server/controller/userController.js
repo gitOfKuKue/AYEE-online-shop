@@ -86,16 +86,21 @@ const logIn = async (req, res) => {
       return res.status(400).json({ message: "Please fill the form!" });
     }
 
-    const user = data.users.find((u) => u.email === email);
-
-    if (!user) {
+    const userIndex = data.users.findIndex((u) => u.email === email);
+    if (userIndex === -1) {
       return res.status(400).json({ message: "No user found!" });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
 
+    const user = data.users[userIndex];
+
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password!" });
     }
+
+    data.users[userIndex].lastLogin = "active";
+
+    await saveUser({ users: data.users });
 
     const token = "123@wedf";
 
@@ -106,6 +111,26 @@ const logIn = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+// Logout
+const logout = async (req, res) => {
+  try {
+    const user = req.body;
+    const usersData = loadUsers();
+    const userIndex = usersData.users.findIndex(
+      (u) => String(u.id) === String(user.id)
+    );
+
+    const date = new Date();
+
+    usersData.users[userIndex].lastLogin = date;
+    await saveUser({ users: usersData.users });
+
+    res.status(200).json({ message: "Log out successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Log out fail!" });
   }
 };
 
@@ -291,6 +316,7 @@ module.exports = {
   getUsers,
   getUserById,
   logIn,
+  logout,
   sendingOtp,
   createUser,
   updateUserProfile,

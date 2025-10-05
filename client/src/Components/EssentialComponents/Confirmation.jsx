@@ -17,9 +17,7 @@ const Confirmation = () => {
 
     const loadUsers = async () => {
       const users = await fetchUsers();
-      const user = users.find(
-        (u) => String(u.id) === String(data.user.id)
-      );
+      const user = users.find((u) => String(u.id) === String(data.user.id));
       setUser(user);
     };
 
@@ -44,10 +42,10 @@ const Confirmation = () => {
     setIsConfirmation(false);
 
     if (confirmStatus === "logout") {
-      performLogOut(navigate);
+      performLogOut(user, baseUrl, navigate);
     } else if (confirmStatus === "deleteUser") {
       deleteUser(user, baseUrl);
-      performLogOut(navigate);
+      performLogOut(user, baseUrl, navigate);
     }
   };
 

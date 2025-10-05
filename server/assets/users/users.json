@@ -25,7 +25,7 @@
         }
       ],
       "paymentMethods": [],
-      "lastLogin": ""
+      "lastLogin": "2025-10-05T01:45:20.299Z"
     },
     {
       "id": 2,
@@ -68,10 +68,10 @@
           "email": "bob.paypal2025@example.com"
         }
       ],
-      "lastLogin": "2025-10-12T08:30:00Z"
+      "lastLogin": "2025-10-05T01:53:40.485Z"
     },
     {
-      "id": 4,
+      "id": 3,
       "firstName": "Justin",
       "lastName": "Oden",
       "email": "justin.oden@gmail.com",
@@ -110,7 +110,7 @@
       "lastLogin": ""
     },
     {
-      "id": 5,
+      "id": 4,
       "firstName": "Robert ",
       "lastName": "Adin",
       "email": "robert.adin@gmail.com",
@@ -132,15 +132,15 @@
       "lastLogin": ""
     },
     {
-      "id": 6,
+      "id": 5,
       "firstName": "Thu Htet ",
       "lastName": "Naing",
-      "email": "kukue014@gmail.com",
+      "email": "thuhtetnaing.14.11@gmail.com",
       "phone": "09796000227",
-      "password": "$2b$10$/cF2Ynl8gXhxQyr7I9qG1.C3vn7Zdrl1g2TZTDPLujIgF3pzaesue",
+      "password": "$2b$10$lm8iMWmx5ik2UTorDbbYaeGZYHf8WfiHXNO1tAUzZwFYopSo2.ZMS",
       "role": "user",
-      "createdAt": "2025-09-27T08:33:34.476Z",
-      "profileImage": "1758962126783.png",
+      "createdAt": "2025-10-05T01:54:41.364Z",
+      "profileImage": "defaultProfilePic.png",
       "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",
       "preferredPaymentMethod": "",
@@ -151,10 +151,7 @@
       "preferredCategories": [],
       "cart": [],
       "paymentMethods": [],
-      "lastLogin": "",
-      "currentPwd": "kukue@014#",
-      "newPwd": "thuHtetnaing@014#",
-      "repeatPwd": "thuHtetnaing@014#"
+      "lastLogin": "active"
     }
   ]
 }

@@ -10,6 +10,10 @@ import LearnMoreBtn from "./buttons/LearnMoreBtn";
 import { Link } from "react-router-dom";
 import useUser from "../Hook/useUser";
 
+import Lottie from "lottie-react";
+// import shoppingAnim from "../assets/animation-pics/Online shopping  Black Friday.json";
+import shoppingAnim from "../assets/animation-pics/Ecommerce business shopping online.json";
+
 const IntroSection = () => {
   const { data } = useUser();
   const user = data?.user;
@@ -61,7 +65,8 @@ const IntroSection = () => {
 
           {/* Picture */}
           <div>
-            <img src={coverPic} alt="Cover Picture" className="lg:w-100 xl:w-150" />
+            {/* <img src={coverPic} alt="Cover Picture" className="lg:w-100 xl:w-150" /> */}
+            <Lottie animationData={shoppingAnim} loop autoplay className="w-180" />
           </div>
         </div>
 

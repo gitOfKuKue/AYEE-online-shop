@@ -9,6 +9,9 @@ import useFetchFuncs from "../../Common/useAPICalling";
 import useAlertStore from "../../Common/Store/useAlertStore";
 import { X } from "lucide-react";
 
+import signupAnimatePic from "../../assets/animation-pics/Welcome.json";
+import Lottie from "lottie-react";
+
 const SignupPage = () => {
   const form = useRef();
   const navigate = useNavigate();
@@ -121,11 +124,12 @@ const SignupPage = () => {
         <div className="absolute top-[50%] left-[50%] -translate-[50%] bg-card-bg p-10 rounded-xl h-200 w-300 grid grid-cols-2 gap-2">
           {/* Image Section */}
           <div className="h-full relative border rounded-md">
-            <img
+            {/* <img
               src={signupPic}
               alt="SignUp Picture"
               className="absolute bottom-0"
-            />
+            /> */}
+            <Lottie animationData={signupAnimatePic} loop autoplay className="w-150 absolute left-1/2 top-1/2 -translate-1/2" />
           </div>
 
           {/* Signup Form */}

@@ -7,6 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import useFetchFuncs from "../../Common/useAPICalling";
 import useAlertStore from "../../Common/Store/useAlertStore";
+import Lottie from "lottie-react";
+
+import signinPic from "../../assets/animation-pics/zpunet icon.json";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -147,11 +150,12 @@ const LoginPage = () => {
 
         {/* Image Section */}
         <div className="h-full relative border rounded-md">
-          <img
+          {/* <img
             src={loginPic}
             alt="LogIn Picture"
             className="absolute bottom-0"
-          />
+          /> */}
+          <Lottie animationData={signinPic} loop autoplay className="w-100 absolute top-1/2 left-1/2 -translate-1/2" />
         </div>
       </div>
     </section>

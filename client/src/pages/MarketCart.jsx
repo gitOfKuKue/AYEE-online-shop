@@ -8,6 +8,9 @@ import { useNavigate } from "react-router";
 import useCartStore from "../Common/Store/useCartStore";
 import useUser from "../Hook/useUser";
 import { mutate } from "swr";
+import Lottie from "lottie-react";
+
+import cartAnimatePic from "../assets/animation-pics/Shopping cart.json";
 
 const MarketCart = () => {
   const navigate = useNavigate();
@@ -113,8 +116,16 @@ const MarketCart = () => {
 
   return (
     <section className="h-[calc(100vh-5em)] px-4 py-6 lg:px-10 bg-background">
-      <div className="flex items-center justify-center gap-3 mb-8">
-        <ShoppingCart size={40} />
+      <div className="flex items-center justify-center gap-4 mb-8">
+        <div className="relative w-38 h-30 overflow-hidden rounded-lg">
+          <Lottie
+            animationData={cartAnimatePic}
+            loop
+            autoplay
+            className="absolute top-[-35%] left-[-5%] w-[150%] h-[150%]"
+          />
+        </div>
+
         <h1 className="text-4xl font-bold">
           My <span className="text-iconic">Cart</span>
         </h1>

@@ -243,7 +243,7 @@ const StyledWrapper = styled.div`
   }
 
   button:hover {
-    background: transparent;
+    background: var(--color-background);
     color: var(--color-iconic);
     box-shadow: 0 0 25px #8eb48660;
   }

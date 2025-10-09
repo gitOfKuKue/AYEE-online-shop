@@ -160,16 +160,16 @@
       "email": "kukue014@gmail.com",
       "phone": "09796000227",
       "password": "$2b$10$17hs5lARXXDxaRoybz/Em.YNYIFlo4rv4UXn.1FlFYG7p8fKtC9VG",
-      "role": "user",
+      "role": "admin",
       "createdAt": "2025-10-05T02:23:54.508Z",
       "profileImage": "defaultProfilePic.png",
       "shippingAddress": "No-10, Merchant Quarter, Aung Chan Thar Str, Daik-U, Bago Region",
       "billingAddress": "",
       "preferredPaymentMethod": "",
-      "loyaltyPoints": 0,
+      "loyaltyPoints": 300,
       "wishlist": [],
       "recentOrders": [],
-      "membershipTier": "Bronze",
+      "membershipTier": "Platinum",
       "preferredCategories": [],
       "cart": [
         {
@@ -178,7 +178,7 @@
         }
       ],
       "paymentMethods": [],
-      "lastLogin": "2025-10-08T09:22:15.955Z"
+      "lastLogin": "2025-10-09T04:13:51.993Z"
     }
   ]
 }
